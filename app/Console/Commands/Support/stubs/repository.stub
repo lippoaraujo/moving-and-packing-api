@@ -1,0 +1,15 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Modules\$STUDLY_NAME$\Entities\$MODEL$;
+use App\Repositories\Core\BaseEloquentRepository;
+use Modules\$STUDLY_NAME$\Repositories\Contracts\$MODEL$RepositoryInterface;
+
+class $NAME$ extends BaseEloquentRepository implements $MODEL$RepositoryInterface
+{
+    public function entity()
+    {
+        return $MODEL$::class;
+    }
+}

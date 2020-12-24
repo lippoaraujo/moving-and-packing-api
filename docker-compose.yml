@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      args:
+        user: iurylippo
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/
+    container_name: app-setup
+    depends_on:
+      - db
+    networks:
+      - moving_and_packing
+
+  db:
+    # image: postgres:12.0-alpine
+    # restart: always
+    # environment:
+    #   POSTGRES_PASSWORD: postgres
+    #   POSTGRES_DB: moving_and_packing
+    # volumes:
+    #   - "./.docker/dbdata:/var/lib/postgresql/data"
+    # container_name: postgres-setup
+    image: mysql:5.7.22
+    container_name: mysql-setup
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+
+    networks:
+      - moving_and_packing
+
+  nginx:
+    build: ./.docker/nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+    container_name: nginx-setup
+    depends_on:
+      - app
+    networks:
+      - moving_and_packing
+
+networks:
+  moving_and_packing:
+    driver: bridge

@@ -1,0 +1,14 @@
+{
+    "name": "Moving",
+    "alias": "moving",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "order": 2,
+    "providers": [
+        "Modules\\Moving\\Providers\\MovingServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

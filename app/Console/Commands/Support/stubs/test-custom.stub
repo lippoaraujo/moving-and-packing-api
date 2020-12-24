@@ -1,0 +1,197 @@
+<?php
+
+namespace $NAMESPACE$;
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Modules\$STUDLY_NAME$\Entities\$MODEL$;
+
+class $NAME$ extends TestCase
+{
+    use DatabaseTransactions;
+
+    private const ROUTE_URL = "/api/v1/$MODULE$/$MODEL_PLURAL$";
+
+    /**
+     * @test
+     */
+    public function given_$MODEL_LOWER$_data_when_posting_returns_$MODEL_LOWER$_stored()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+
+        $data = $this->getData();
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $data);
+
+        $response->assertCreated();
+        $response->assertJsonStructure($this->getJsonStructure());
+    }
+
+    /**
+     * @test
+     */
+    public function given_incomplete_$MODEL_LOWER$_data_when_posting_returns_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $data = $this->getData();
+
+        if(isset($data['name'])) {
+            unset($data['name']);
+        }
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function given_noid_when_getting_$MODEL_LOWER$_returns_all_$MODEL_PLURAL$_data()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('GET', self::ROUTE_URL);
+
+        $response->assertOk();
+        $response->assertJsonStructure($this->getJsonStructure(true));
+    }
+
+    /**
+     * @test
+     */
+    public function given_valid_id_when_getting_$MODEL_LOWER$_returns_a_$MODEL_LOWER$_data()
+    {
+        $$MODEL_LOWER$ = $this->getValid$MODEL$();
+
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('GET', $this->getRouteId(self::ROUTE_URL, $$MODEL_LOWER$->id));
+
+        $response->assertOk();
+        $response->assertJsonStructure($this->getJsonStructure());
+    }
+
+    /**
+     * @test
+     */
+    public function given_notvalid_id_when_getting_$MODEL_LOWER$_returns_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('GET', $this->getRouteId(self::ROUTE_URL));
+
+        $response->assertNotFound();
+        $response->assertJsonStructure(['message',]);
+    }
+
+    /**
+     * @test
+     */
+    public function given_$MODEL_LOWER$_data_withvalid_id_when_putting_returns_true()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $$MODEL_LOWER$ = $this->getValid$MODEL$();
+        $$MODEL_LOWER$->name = 'name updated';
+        $data = $$MODEL_LOWER$->toArray();
+
+        $response = $this->withHeaders($headers)
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $$MODEL_LOWER$->id), $data);
+
+        $response->assertOk();
+        $response->assertExactJson(['data' => true]);
+    }
+
+     /**
+     * @test
+     */
+    public function given_$MODEL_LOWER$_data_with_notvalid_id_when_putting_returns_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $$MODEL_LOWER$ = $this->getValid$MODEL$();
+        $$MODEL_LOWER$->name = 'name updated';
+        $data = $$MODEL_LOWER$->toArray();
+
+        $response = $this->withHeaders($headers)
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
+
+        $response->assertNotFound();
+        $response->assertJsonStructure(['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function given_valid_$MODEL_LOWER$_id_when_deleting_returns_true()
+    {
+        $$MODEL_LOWER$ = $this->getValid$MODEL$();
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('DELETE', $this->getRouteId(self::ROUTE_URL, $$MODEL_LOWER$->id));
+
+        $response->assertOk();
+        $response->assertExactJson(['data' => true]);
+    }
+
+    /**
+     * @test
+     */
+    public function given_notvalid_$MODEL_LOWER$_id_when_deleting_returns_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('DELETE', $this->getRouteId(self::ROUTE_URL));
+
+        $response->assertNotFound();
+        $response->assertJsonStructure(['message']);
+    }
+
+    private function getData()
+    {
+        $$MODEL_LOWER$ = $MODEL$::factory()->make();
+        $data = $$MODEL_LOWER$->toArray();
+        return $data;
+    }
+
+    private function getValid$MODEL_LOWER$(bool $toArray = false)
+    {
+        $$MODEL_LOWER$ =  $MODEL$::all()->first();
+
+        if($toArray) {
+            $$MODEL_LOWER$ = $$MODEL_LOWER$->toArray();
+        }
+
+        return $$MODEL_LOWER$;
+    }
+
+    private function getJsonStructure(bool $hasMany = false)
+    {
+        if($hasMany) {
+            $json = [
+                '*' => [
+                    'id',
+                    'name',
+                    'active',
+                ]];
+        } else {
+            $json = [
+                'id',
+                'name',
+                'active',
+            ];
+        }
+
+        $data['data'] = $json;
+        return $data;
+    }
+}

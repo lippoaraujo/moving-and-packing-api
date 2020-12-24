@@ -1,0 +1,105 @@
+name: Moving&Packing CI
+on:
+  pull_request:
+    branches:
+      - develop
+      - master
+jobs:
+  continuous-integration:
+    name: Laravel (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    # env:
+    #   DB_DATABASE: moving_and_packing
+    #   DB_USERNAME: root
+    #   DB_PASSWORD: secret
+    # services:
+      # mysql:
+      #   image: mysql:8.0
+      #   env:
+      #     MYSQL_ALLOW_EMPTY_PASSWORD: false
+      #     MYSQL_ROOT_PASSWORD: secret
+      #     MYSQL_DATABASE: moving_and_packing
+      #     MYSQL_USERNAME: root
+      #   ports:
+      #     - 3306/tcp
+      #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['7.4']
+    steps:
+      - name: Checkout to branch commit
+        uses: actions/checkout@v2
+
+      # - name: verify Database
+      #   run: mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS moving_and_packing;'
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, dom, fileinfo, mysql, php-zip, pdo_sqlite
+          coverage: xdebug #optional
+          tools: composer, phpcs
+
+      - name: PHPCS check
+        uses: chekalsky/phpcs-action@v1
+
+      # - name: Start mysql service
+      #   run: sudo /etc/init.d/mysql start
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      # - name: Prepare the application
+      #   run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Copy ENV Laravel Configuration for CI
+        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+
+      - name: Create sqllite file
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: View Env settings
+        run: cat .env
+
+      - name: Clean Cache
+        run: php artisan cache:clear
+
+      # - name: Register Redis as service provider
+        # run: sed -i '$i\$app->register(Illuminate\\Redis\\RedisServiceProvider::class);' bootstrap/app.php
+
+      # - name: Run Migration Base System
+      #   run: php artisan migrate
+        # env:
+        #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+      - name: Run Migration Base Modules
+        run: php artisan module:migrate --database=sqlite
+        # env:
+        #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+      # - name: Run Database Modules Seeders
+      #   run: php artisan module:seed
+        # env:
+        #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+
+      - name: Run Test with phpunit
+        run: ./vendor/bin/phpunit --colors=never
+        # env:
+        #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
