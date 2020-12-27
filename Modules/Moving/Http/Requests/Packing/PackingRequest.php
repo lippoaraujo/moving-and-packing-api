@@ -14,14 +14,16 @@ class PackingRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            //'name'          => 'required|string',
+            'name'  => 'required|string',
+            'unity'  => 'required|string',
         ];
 
-        //if (in_array($this->method(), ['PUT', 'PATCH'])) {
-        //    $rules = [
-        //        'name'          => 'string',
-        //    ];
-        //}
+        if (in_array($this->method(), ['PUT', 'PATCH'])) {
+            $rules = [
+               'name' => 'string',
+               'unity' => 'string',
+            ];
+        }
 
         return $rules;
     }

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Modules\Moving\Entities\Item;
+use Modules\Moving\Entities\Packing;
 use Modules\Moving\Entities\Room;
 
 class ItemTest extends TestCase
@@ -28,7 +29,7 @@ class ItemTest extends TestCase
         ->json('POST', self::ROUTE_URL, $data);
 
         $response->assertCreated();
-        $response->assertJsonStructure($this->getJsonStructure());
+        $response->assertJsonStructure($this->getJsonStructure(false, true));
     }
 
     /**
@@ -159,7 +160,11 @@ class ItemTest extends TestCase
 
     private function getData()
     {
-        $item = Item::factory()->make();
+        $packing = Packing::first();
+
+        $item = Item::factory()->make([
+            'packing_id' => $packing
+        ]);
 
         return $item->toArray();
     }
@@ -175,7 +180,7 @@ class ItemTest extends TestCase
         return $item;
     }
 
-    private function getJsonStructure(bool $hasMany = false)
+    private function getJsonStructure(bool $hasMany = false, bool $noRelations = false)
     {
         if($hasMany) {
             $json = [
@@ -187,7 +192,22 @@ class ItemTest extends TestCase
                     'tag',
                     'active',
                     'tenant_id',
+                    'packing' => [
+                        'id',
+                        'name',
+                        'unity'
+                    ]
                 ]];
+        } elseif($noRelations) {
+            $json = [
+                'id',
+                'name',
+                'description',
+                'cubic_feet',
+                'tag',
+                'active',
+                'tenant_id',
+            ];
         } else {
             $json = [
                 'id',
@@ -197,6 +217,11 @@ class ItemTest extends TestCase
                 'tag',
                 'active',
                 'tenant_id',
+                'packing' => [
+                    'id',
+                    'name',
+                    'unity'
+                ]
             ];
         }
 

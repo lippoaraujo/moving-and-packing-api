@@ -49,8 +49,9 @@ class ActionRouteUsergroupTableSeeder extends Seeder
                     throw new SeedActionsNotFound($message, Response::HTTP_NOT_FOUND);
                 }
 
-                $sellersRoutes          = ['orders', 'items', 'rooms', 'customers'];
-                $sellersRoutesIsNotMenu = ['items', 'rooms', 'customers'];
+                $sellersRoutes          = ['orders', 'items', 'rooms', 'customers', 'sellers'];
+
+                $sellersRoutesIsNotMenu = ['items', 'rooms', 'customers', 'sellers'];
                 $sellersActions         = ['index'];
 
                 foreach($usergroups as $usergroup) {

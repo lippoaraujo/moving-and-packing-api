@@ -181,13 +181,13 @@ class PackingTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                    'active',
+                    'unity',
                 ]];
         } else {
             $json = [
                 'id',
                 'name',
-                'active',
+                'unity',
             ];
         }
 

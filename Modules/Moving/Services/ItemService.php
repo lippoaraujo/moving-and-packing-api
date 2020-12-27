@@ -22,7 +22,7 @@ class ItemService extends Controller
      */
     public function index()
     {
-        return $this->repo->getAll();
+        return $this->repo->relationships('packing')->getAll();
     }
 
     /**
@@ -43,7 +43,7 @@ class ItemService extends Controller
      */
     public function show(string $id)
     {
-        return $this->repo->findById($id);
+        return $this->repo->relationships('packing')->findById($id);
     }
 
     /**

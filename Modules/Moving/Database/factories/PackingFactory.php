@@ -21,8 +21,15 @@ class PackingFactory extends Factory
      */
     public function definition()
     {
-        //return [
-        //    'name'   => $this->faker->word(),
-        //];
+        return [
+            'name'   => $this->faker->unique()->randomElement([
+                            'paperboard boxes',
+                            'corrugated boxes',
+                            'plastic boxes',
+                            'rigid boxes',
+                            'caixa'
+                        ]),
+            'unity'   => 'unidades',
+        ];
     }
 }

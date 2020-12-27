@@ -18,10 +18,15 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('cubic_feet');
+            $table->integer('quantity');
+            $table->unsignedBigInteger('packing_id');
             $table->string('tag');
             $table->boolean('active')->default(1);
             $table->unsignedBigInteger('tenant_id');
+
+            $table->foreign('packing_id')->references('id')->on('packings')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
+
             $table->timestamps();
         });
     }

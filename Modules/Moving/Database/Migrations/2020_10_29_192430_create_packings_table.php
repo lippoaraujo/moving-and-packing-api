@@ -15,6 +15,11 @@ class CreatePackingsTable extends Migration
     {
         Schema::create('packings', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('unity');
+
+            $table->unsignedBigInteger('tenant_id');
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
         });

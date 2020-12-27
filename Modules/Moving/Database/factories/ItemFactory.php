@@ -26,6 +26,8 @@ class ItemFactory extends Factory
            'name'           => $this->faker->word(),
            'description'    => $this->faker->text(),
            'cubic_feet'     => $this->faker->randomFloat(2, 1, 1000),
+           'quantity'       => $this->faker->randomNumber(2),
+           'cubic_feet'     => $this->faker->randomFloat(2, 1, 1000),
            'tag'            => $this->faker->randomElement(['ocean']),
            'active'         => $this->faker->randomElement([1]),
         ];

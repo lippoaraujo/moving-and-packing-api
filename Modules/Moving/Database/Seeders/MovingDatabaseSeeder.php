@@ -12,6 +12,7 @@ use Modules\Moving\Database\Seeders\Start\{
     ItemTableseeder,
     ModuleTableSeeder,
     OrderTableSeeder,
+    PackingTableSeeder,
     RoomTableSeeder,
     RouteTableSeeder,
     UsergroupTableSeeder,
@@ -40,6 +41,7 @@ class MovingDatabaseSeeder extends Seeder
         if ($env_app === 'local' || $env_app === 'testing') {
             $this->call(CustomerTableSeeder::class);
             $this->call(RoomTableSeeder::class);
+            $this->call(PackingTableSeeder::class);
             $this->call(ItemTableseeder::class);
             $this->call(OrderTableSeeder::class);
         }

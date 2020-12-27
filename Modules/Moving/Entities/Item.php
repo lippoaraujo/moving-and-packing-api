@@ -19,6 +19,8 @@ class Item extends Model
         'name',
         'description',
         'cubic_feet',
+        'quantity',
+        'packing_id',
         'tag',
         'active',
         'tenant_id'
@@ -37,5 +39,10 @@ class Item extends Model
     public function orderRooms()
     {
         return $this->belongsToMany(OrderRoom::class, 'item_order_room', 'item_id', 'order_room_id');
+    }
+
+    public function packing()
+    {
+        return $this->hasOne(Packing::class, 'id', 'packing_id');
     }
 }

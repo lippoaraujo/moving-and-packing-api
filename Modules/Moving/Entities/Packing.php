@@ -16,7 +16,7 @@ class Packing extends Model
      */
     protected $fillable = [
         'name',
-        'active',
+        'unity',
     ];
 
     /**
