@@ -6,36 +6,34 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Modules\Moving\Entities\Item;
 use Modules\Moving\Entities\Packing;
-use Modules\Moving\Entities\Room;
 
-class ItemTest extends TestCase
+class PackingTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private const ROUTE_URL = "/api/v1/moving/items";
+    private const ROUTE_URL = "/api/v1/moving/packings";
 
     /**
      * @test
      */
-    public function given_item_room_data_when_posting_returns_item_stored()
+    public function given_packing_data_when_posting_returns_packing_stored()
     {
         $headers = $this->headers($this->getUserAdmin());
 
-        $data = $this->getData(true);
+        $data = $this->getData();
 
         $response = $this->withHeaders($headers)
         ->json('POST', self::ROUTE_URL, $data);
 
         $response->assertCreated();
-        $response->assertJsonStructure($this->getJsonStructure(false, true));
+        $response->assertJsonStructure($this->getJsonStructure());
     }
 
     /**
      * @test
      */
-    public function given_incomplete_item_data_when_posting_returns_error()
+    public function given_incomplete_packing_data_when_posting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
         $data = $this->getData();
@@ -54,7 +52,7 @@ class ItemTest extends TestCase
     /**
      * @test
      */
-    public function given_noid_when_getting_item_returns_all_items_data()
+    public function given_noid_when_getting_packing_returns_all_packings_data()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -68,14 +66,14 @@ class ItemTest extends TestCase
     /**
      * @test
      */
-    public function given_valid_id_when_getting_item_returns_a_item_data()
+    public function given_valid_id_when_getting_packing_returns_a_packing_data()
     {
-        $item = $this->getValidItem();
+        $packing = $this->getValidPacking();
 
         $headers = $this->headers($this->getUserAdmin());
 
         $response = $this->withHeaders($headers)
-        ->json('GET', $this->getRouteId(self::ROUTE_URL, $item->id));
+        ->json('GET', $this->getRouteId(self::ROUTE_URL, $packing->id));
 
         $response->assertOk();
         $response->assertJsonStructure($this->getJsonStructure());
@@ -84,7 +82,7 @@ class ItemTest extends TestCase
     /**
      * @test
      */
-    public function given_notvalid_id_when_getting_item_returns_error()
+    public function given_notvalid_id_when_getting_packing_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -98,15 +96,15 @@ class ItemTest extends TestCase
     /**
      * @test
      */
-    public function given_item_data_withvalid_id_when_putting_returns_true()
+    public function given_packing_data_withvalid_id_when_putting_returns_true()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $item = $this->getValidItem();
-        $item->name = 'name updated';
-        $data = $item->toArray();
+        $packing = $this->getValidPacking();
+        $packing->name = 'name updated';
+        $data = $packing->toArray();
 
         $response = $this->withHeaders($headers)
-        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $item->id), $data);
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $packing->id), $data);
 
         $response->assertOk();
         $response->assertExactJson(['data' => true]);
@@ -115,12 +113,12 @@ class ItemTest extends TestCase
      /**
      * @test
      */
-    public function given_item_data_with_notvalid_id_when_putting_returns_error()
+    public function given_packing_data_with_notvalid_id_when_putting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $item = $this->getValidItem();
-        $item->name = 'name updated';
-        $data = $item->toArray();
+        $packing = $this->getValidPacking();
+        $packing->name = 'name updated';
+        $data = $packing->toArray();
 
         $response = $this->withHeaders($headers)
         ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
@@ -132,13 +130,13 @@ class ItemTest extends TestCase
     /**
      * @test
      */
-    public function given_valid_item_id_when_deleting_returns_true()
+    public function given_valid_packing_id_when_deleting_returns_true()
     {
-        $item = $this->getValidItem();
+        $packing = $this->getValidPacking();
         $headers = $this->headers($this->getUserAdmin());
 
         $response = $this->withHeaders($headers)
-        ->json('DELETE', $this->getRouteId(self::ROUTE_URL, $item->id));
+        ->json('DELETE', $this->getRouteId(self::ROUTE_URL, $packing->id));
 
         $response->assertOk();
         $response->assertExactJson(['data' => true]);
@@ -147,7 +145,7 @@ class ItemTest extends TestCase
     /**
      * @test
      */
-    public function given_notvalid_item_id_when_deleting_returns_error()
+    public function given_notvalid_packing_id_when_deleting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -160,68 +158,36 @@ class ItemTest extends TestCase
 
     private function getData()
     {
-        $packing = Packing::first();
-
-        $item = Item::factory()->make([
-            'packing_id' => $packing
-        ]);
-
-        return $item->toArray();
+        $packing = Packing::factory()->make();
+        $data = $packing->toArray();
+        return $data;
     }
 
-    private function getValiditem(bool $toArray = false)
+    private function getValidpacking(bool $toArray = false)
     {
-        $item =  Item::all()->first();
+        $packing =  Packing::all()->first();
 
         if($toArray) {
-            $item = $item->toArray();
+            $packing = $packing->toArray();
         }
 
-        return $item;
+        return $packing;
     }
 
-    private function getJsonStructure(bool $hasMany = false, bool $noRelations = false)
+    private function getJsonStructure(bool $hasMany = false)
     {
         if($hasMany) {
             $json = [
                 '*' => [
                     'id',
                     'name',
-                    'description',
-                    'cubic_feet',
-                    'tag',
-                    'active',
-                    'tenant_id',
-                    'packing' => [
-                        'id',
-                        'name',
-                        'unity'
-                    ]
+                    'unity',
                 ]];
-        } elseif($noRelations) {
-            $json = [
-                'id',
-                'name',
-                'description',
-                'cubic_feet',
-                'tag',
-                'active',
-                'tenant_id',
-            ];
         } else {
             $json = [
                 'id',
                 'name',
-                'description',
-                'cubic_feet',
-                'tag',
-                'active',
-                'tenant_id',
-                'packing' => [
-                    'id',
-                    'name',
-                    'unity'
-                ]
+                'unity',
             ];
         }
 

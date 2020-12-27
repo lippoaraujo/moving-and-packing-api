@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - develop
-      - master
+      - main
 jobs:
   continuous-integration:
     name: Laravel (PHP ${{ matrix.php-versions }})
@@ -13,20 +13,20 @@ jobs:
     #   DB_USERNAME: root
     #   DB_PASSWORD: secret
     # services:
-      # mysql:
-      #   image: mysql:8.0
-      #   env:
-      #     MYSQL_ALLOW_EMPTY_PASSWORD: false
-      #     MYSQL_ROOT_PASSWORD: secret
-      #     MYSQL_DATABASE: moving_and_packing
-      #     MYSQL_USERNAME: root
-      #   ports:
-      #     - 3306/tcp
-      #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    # mysql:
+    #   image: mysql:8.0
+    #   env:
+    #     MYSQL_ALLOW_EMPTY_PASSWORD: false
+    #     MYSQL_ROOT_PASSWORD: secret
+    #     MYSQL_DATABASE: moving_and_packing
+    #     MYSQL_USERNAME: root
+    #   ports:
+    #     - 3306/tcp
+    #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.4']
+        php-versions: ["7.4"]
     steps:
       - name: Checkout to branch commit
         uses: actions/checkout@v2
@@ -82,13 +82,11 @@ jobs:
         run: php artisan cache:clear
 
       # - name: Register Redis as service provider
-        # run: sed -i '$i\$app->register(Illuminate\\Redis\\RedisServiceProvider::class);' bootstrap/app.php
-
+      # run: sed -i '$i\$app->register(Illuminate\\Redis\\RedisServiceProvider::class);' bootstrap/app.php
       # - name: Run Migration Base System
       #   run: php artisan migrate
-        # env:
-        #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-
+      # env:
+      #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       - name: Run Migration Base Modules
         run: php artisan module:migrate --database=sqlite
         # env:
@@ -96,9 +94,8 @@ jobs:
 
       # - name: Run Database Modules Seeders
       #   run: php artisan module:seed
-        # env:
-        #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-
+      # env:
+      #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       - name: Run Test with phpunit
         run: ./vendor/bin/phpunit --colors=never
         # env:

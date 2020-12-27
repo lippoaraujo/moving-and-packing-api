@@ -10,7 +10,8 @@ use Modules\Moving\Entities\{
     Order,
     Room,
     Address,
-    Image
+    Image,
+    Packing
 };
 use Modules\Moving\Entities\Observers\{
     CustomerObserver,
@@ -18,7 +19,8 @@ use Modules\Moving\Entities\Observers\{
     OrderObserver,
     RoomObserver,
     AddressObserver,
-    ImageObserver
+    ImageObserver,
+    PackingObserver
 };
 
 class MovingServiceProvider extends ServiceProvider
@@ -44,13 +46,7 @@ class MovingServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-
-        Customer::observe(CustomerObserver::class);
-        Room::observe(RoomObserver::class);
-        Item::observe(ItemObserver::class);
-        Order::observe(OrderObserver::class);
-        Address::observe(AddressObserver::class);
-        Image::observe(ImageObserver::class);
+        $this->registerObservers();
     }
 
     /**
@@ -131,5 +127,16 @@ class MovingServiceProvider extends ServiceProvider
             }
         }
         return $paths;
+    }
+
+    private function registerObservers()
+    {
+        Customer::observe(CustomerObserver::class);
+        Room::observe(RoomObserver::class);
+        Item::observe(ItemObserver::class);
+        Order::observe(OrderObserver::class);
+        Address::observe(AddressObserver::class);
+        Image::observe(ImageObserver::class);
+        Packing::observe(PackingObserver::class);
     }
 }

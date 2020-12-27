@@ -1,34 +1,27 @@
-version: '3.7'
-
+version: "3.7"
 services:
   app:
     build:
       args:
-        user: iurylippo
-        uid: 1000
+        user: dev
+        uid: 1001
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    image: movingandpacking
+    container_name: movingandpacking-app
     restart: unless-stopped
+    working_dir: /var/www/
     volumes:
-      - ./:/var/www/
-    container_name: app-setup
-    depends_on:
-      - db
+      - ./:/var/www
     networks:
-      - moving_and_packing
+      - movingandpacking
 
   db:
-    # image: postgres:12.0-alpine
-    # restart: always
-    # environment:
-    #   POSTGRES_PASSWORD: postgres
-    #   POSTGRES_DB: moving_and_packing
-    # volumes:
-    #   - "./.docker/dbdata:/var/lib/postgresql/data"
-    # container_name: postgres-setup
-    image: mysql:5.7.22
-    container_name: mysql-setup
+    image: mysql:5.7
+    container_name: movingandpacking-db
     restart: unless-stopped
+    ports:
+      - 3307:3306
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -37,24 +30,23 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - ./.docker/dbdata:/var/lib/mysql
-
+      # - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - ./docker-compose/mysql:/var/lib/mysql
     networks:
-      - moving_and_packing
+      - movingandpacking
 
   nginx:
-    build: ./.docker/nginx
+    image: nginx:alpine
+    container_name: movingandpacking-nginx
     restart: unless-stopped
     ports:
-      - "8000:80"
+      - 8000:80
     volumes:
       - ./:/var/www
-    container_name: nginx-setup
-    depends_on:
-      - app
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
-      - moving_and_packing
+      - movingandpacking
 
 networks:
-  moving_and_packing:
+  movingandpacking:
     driver: bridge

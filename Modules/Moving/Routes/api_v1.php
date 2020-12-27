@@ -50,4 +50,10 @@ Route::group([
     Route::delete('/images/{id}', 'ImageController@destroy');
 
     Route::get('/sellers', 'SellerController@index');
+
+    Route::get('/packings', 'PackingController@index');
+    Route::post('/packings', 'PackingController@store');
+    Route::get('/packings/{id}', 'PackingController@show');
+    Route::put('/packings/{id}', 'PackingController@update');
+    Route::delete('/packings/{id}', 'PackingController@destroy');
 });
