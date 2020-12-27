@@ -2,16 +2,14 @@
 
 namespace Modules\Moving\Services;
 
-use Exception;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
-use Modules\Moving\Repositories\Contracts\ItemRepositoryInterface;
+use Modules\Moving\Repositories\Contracts\PackingRepositoryInterface;
 
-class ItemService extends Controller
+class PackingService extends Controller
 {
     private $repo;
 
-    public function __construct(ItemRepositoryInterface $repo)
+    public function __construct(PackingRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
@@ -22,28 +20,27 @@ class ItemService extends Controller
      */
     public function index()
     {
-        return $this->repo->relationships('packing')->getAll();
+        return $this->repo->getAll();
     }
 
     /**
      * Store a newly created resource in storage.
      * @param array $request
-     * @return Item
+     * @return Packing
      */
     public function store(array $data)
     {
         return $this->repo->create($data);
-        ;
     }
 
     /**
      * Show the specified resource.
      * @param int $id
-     * @return Item
+     * @return Packing
      */
     public function show(string $id)
     {
-        return $this->repo->relationships('packing')->findById($id);
+        return $this->repo->findById($id);
     }
 
     /**

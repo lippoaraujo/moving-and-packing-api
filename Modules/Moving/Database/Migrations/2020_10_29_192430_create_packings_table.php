@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateItemsTable extends Migration
+class CreatePackingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,12 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('packings', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('description');
-            $table->decimal('cubic_feet');
-            $table->integer('quantity');
-            $table->unsignedBigInteger('packing_id');
-            $table->string('tag');
-            $table->boolean('active')->default(1);
-            $table->unsignedBigInteger('tenant_id');
+            $table->string('unity');
 
-            $table->foreign('packing_id')->references('id')->on('packings')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('tenant_id');
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
@@ -38,6 +32,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('packings');
     }
 }

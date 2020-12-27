@@ -17,6 +17,8 @@ class ItemRequest extends FormRequest
             'name'              => 'required|string',
             'description'       => 'required|string',
             'cubic_feet'        => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'quantity'          => 'required|int',
+            'packing_id'        => 'required|int',
             'tag'               => 'required|string',
             'active'            => 'int',
         ];
@@ -26,6 +28,8 @@ class ItemRequest extends FormRequest
                 'name'          => 'string',
                 'description'   => 'string',
                 'cubic_feet'    => 'regex:/^\d+(\.\d{1,2})?$/',
+                'quantity'      => 'int',
+                'packing_id'    => 'int',
                 'tag'           => 'string',
                 'active'        => 'int',
             ];
