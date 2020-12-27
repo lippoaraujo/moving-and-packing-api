@@ -9,6 +9,7 @@ use Modules\Moving\Repositories\Contracts\{
     ImageRepositoryInterface,
     ItemRepositoryInterface,
     OrderRepositoryInterface,
+    PackingRepositoryInterface,
     RoomRepositoryInterface,
     SellerRepositoryInterface,
 };
@@ -18,6 +19,7 @@ use Modules\Moving\Repositories\Eloquent\{
     EloquentImageRepository,
     EloquentItemRepository,
     EloquentOrderRepository,
+    EloquentPackingRepository,
     EloquentRoomRepository,
     EloquentSellerRepository,
 };
@@ -59,6 +61,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             SellerRepositoryInterface::class,
             EloquentSellerRepository::class
+        );
+
+        $this->app->bind(
+            PackingRepositoryInterface::class,
+            EloquentPackingRepository::class
         );
     }
 
