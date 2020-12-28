@@ -18,7 +18,7 @@ class CreateItemsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('cubic_feet');
-            $table->integer('quantity');
+            $table->integer('packing_qty');
             $table->unsignedBigInteger('packing_id');
             $table->string('tag');
             $table->boolean('active')->default(1);
