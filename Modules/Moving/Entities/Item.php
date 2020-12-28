@@ -19,7 +19,7 @@ class Item extends Model
         'name',
         'description',
         'cubic_feet',
-        'quantity',
+        'packing_qty',
         'packing_id',
         'tag',
         'active',

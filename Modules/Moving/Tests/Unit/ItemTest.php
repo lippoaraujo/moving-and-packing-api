@@ -190,6 +190,8 @@ class ItemTest extends TestCase
                     'description',
                     'cubic_feet',
                     'tag',
+                    'packing_qty',
+                    'packing_id',
                     'active',
                     'tenant_id',
                     'packing' => [
@@ -205,6 +207,8 @@ class ItemTest extends TestCase
                 'description',
                 'cubic_feet',
                 'tag',
+                'packing_qty',
+                'packing_id',
                 'active',
                 'tenant_id',
             ];
@@ -215,6 +219,8 @@ class ItemTest extends TestCase
                 'description',
                 'cubic_feet',
                 'tag',
+                'packing_qty',
+                'packing_id',
                 'active',
                 'tenant_id',
                 'packing' => [
