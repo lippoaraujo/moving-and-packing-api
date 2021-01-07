@@ -76,6 +76,16 @@ class RouteTableSeeder extends Seeder
 
                 $this->command->info("INFO: Route was created: {$route->name}");
 
+                $route = Route::factory()->create([
+                    'name'  => 'packings',
+                    'controllers' => 'PackingController',
+                    'image' => 'mdi-package-variant-closed',
+                    'is_menu' => 1,
+                    'module_id' => $module->id,
+                ]);
+
+                $this->command->info("INFO: Route was created: {$route->name}");
+
             } else {
                 $this->command->warn('INFO: Routes alredy exist!');
             }
