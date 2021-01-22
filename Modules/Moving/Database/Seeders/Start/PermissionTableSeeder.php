@@ -20,26 +20,31 @@ class PermissionTableSeeder extends Seeder
         $permissions = [
             'customer-list',
             'customer-create',
+            'customer-show',
             'customer-edit',
             'customer-delete',
 
             'item-list',
             'item-create',
+            'item-show',
             'item-edit',
             'item-delete',
 
             'room-list',
             'room-create',
+            'room-show',
             'room-edit',
             'room-delete',
 
             'packing-list',
             'packing-create',
+            'packing-show',
             'packing-edit',
             'packing-delete',
 
             'order-list',
             'order-create',
+            'order-show',
             'order-edit',
             'order-delete',
 

@@ -2,7 +2,7 @@
 
 namespace Modules\System\Repositories\Contracts;
 
-interface UsergroupRepositoryInterface
+interface RoleRepositoryInterface
 {
 
 }

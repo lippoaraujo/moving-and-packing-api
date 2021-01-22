@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Modules\System\Database\Seeders\Exceptions\SeedTenantNotFound;
 use \Modules\System\Entities\Tenant;
-use Spatie\Permission\Models\Role;
+use Modules\System\Entities\Role;
 
 class RoleTableSeeder extends Seeder
 {

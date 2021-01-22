@@ -9,8 +9,7 @@ use Modules\System\Database\Seeders\Exceptions\SeedTenantNotFound;
 use Modules\System\Database\Seeders\Traits\AdminSync;
 use \Modules\System\Entities\Tenant;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-
+use Modules\System\Entities\Role;
 class RoleTableSeeder extends Seeder
 {
     use AdminSync;
@@ -32,7 +31,10 @@ class RoleTableSeeder extends Seeder
             // create role Admin test with all permissions
             if(empty($role)) {
 
-                $role = Role::create(['name' => 'Admin']);
+                $role = Role::create([
+                    'name' => 'Admin',
+                    'tenant_id' => $tenant->id
+                ]);
 
                 $permissions = Permission::pluck('id','id')->all();
 

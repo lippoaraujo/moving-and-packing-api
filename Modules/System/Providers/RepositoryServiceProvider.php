@@ -8,6 +8,7 @@ use Modules\System\Repositories\Contracts\{
     ActionRepositoryInterface,
     DashboardRepositoryInterface,
     ModuleRepositoryInterface,
+    RoleRepositoryInterface,
     RouteRepositoryInterface,
     TenantRepositoryInterface,
     UsergroupRepositoryInterface,
@@ -18,6 +19,7 @@ use Modules\System\Repositories\Eloquent\{
     EloquentActionRepository,
     EloquentDashboardRepository,
     EloquentModuleRepository,
+    EloquentRoleRepository,
     EloquentRouteRepository,
     EloquentTenantRepository,
     EloquentUsergroupRepository,
@@ -68,6 +70,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             DashboardRepositoryInterface::class,
             EloquentDashboardRepository::class
+        );
+        $this->app->bind(
+            RoleRepositoryInterface::class,
+            EloquentRoleRepository::class
         );
     }
 

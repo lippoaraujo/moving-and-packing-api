@@ -4,14 +4,15 @@ namespace Modules\System\Services;
 
 use Illuminate\Routing\Controller;
 use Spatie\Permission\Models\Role;
+use Modules\System\Repositories\Contracts\RoleRepositoryInterface;
 
 class RoleService extends Controller
 {
-    private $role;
+    private $repo;
 
-    public function __construct(Role $role)
+    public function __construct(RoleRepositoryInterface $repo)
     {
-        $this->role = $role;
+        $this->repo = $repo;
     }
 
     /**
@@ -20,7 +21,7 @@ class RoleService extends Controller
      */
     public function index()
     {
-        return $this->role->orderBy('id','DESC')->paginate(10);
+        return $this->repo->relationships('permissions')->getAll();
     }
 
     /**
@@ -30,13 +31,13 @@ class RoleService extends Controller
      */
     public function store(array $data)
     {
-        $role = $this->role->create(['name' => $data['name']]);
+        $role = $this->repo->create(['name' => $data['name']]);
 
         if(!empty($data['permission'])) {
             $role->syncPermissions($data['permission']);
         }
 
-        return $this->repo->create($role);
+        return $role;
     }
 
     /**
@@ -46,7 +47,7 @@ class RoleService extends Controller
      */
     public function show(string $id)
     {
-        return $this->role->with('permissions')->findOrFail($id);
+        return $this->repo->relationships('permissions')->findById($id);
     }
 
     /**
@@ -57,7 +58,7 @@ class RoleService extends Controller
      */
     public function update(array $data, $id)
     {
-        $role = $this->role->findById($id);
+        $role = $this->repo->findById($id);
         $role->name = $data['name'];
         $role->save();
 
@@ -72,6 +73,6 @@ class RoleService extends Controller
      */
     public function destroy($id)
     {
-        return $this->role->findById($id)->delete();
+        return $this->repo->delete($id);
     }
 }

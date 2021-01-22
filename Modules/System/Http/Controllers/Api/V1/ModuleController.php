@@ -23,6 +23,12 @@ class ModuleController extends Controller
 
     public function __construct(ModuleService $service)
     {
+        $this->middleware('permission:module-list', ['only' => ['index']]);
+        $this->middleware('permission:module-create', ['only' => ['store']]);
+        $this->middleware('permission:module-show', ['only' => ['show']]);
+        $this->middleware('permission:module-edit', ['only' => ['update']]);
+        $this->middleware('permission:module-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
     }
 

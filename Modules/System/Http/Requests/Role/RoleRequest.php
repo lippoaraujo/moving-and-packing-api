@@ -14,14 +14,15 @@ class RoleRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name'          => 'required|unique:roles,name',
-            'permission'    => 'required',
+            'name'          => 'required|unique:roles,name|string',
+            'permission'    => 'array',
+            'permission.*'  => 'integer'
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
            $rules = [
                 'name'          => 'required',
-                'permission'    => 'required',
+                'permission'    => 'array',
            ];
         }
 
