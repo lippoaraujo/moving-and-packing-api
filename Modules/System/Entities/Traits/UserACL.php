@@ -106,7 +106,7 @@ Trait UserACL
         return false;
     }
 
-    public function isAdmin(): bool
+    public function isSuperAdmin(): bool
     {
         return in_array($this->email, config('acl.admins'));
     }

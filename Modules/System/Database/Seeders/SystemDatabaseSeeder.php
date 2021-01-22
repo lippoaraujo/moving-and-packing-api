@@ -5,14 +5,11 @@ namespace Modules\System\Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\System\Database\Seeders\Start\{
-    ActionRouteTableSeeder,
-    ActionRouteUsergroupTableSeeder,
-    ActionRouteUserTableSeeder,
-    ActionTableSeeder,
     ModuleTableSeeder,
-    RouteTableSeeder,
+    PermissionTableSeeder,
+    RoleTableSeeder,
     TenantTableSeeder,
-    UsergroupTableSeeder,
+    UserSuperAdminTableSeeder,
     UserTableSeeder
 };
 
@@ -29,17 +26,14 @@ class SystemDatabaseSeeder extends Seeder
 
         //config users
         $this->call(TenantTableSeeder::class);
-        $this->call(UsergroupTableSeeder::class);
-        $this->call(UserTableSeeder::class);
-
-        //config modules
         $this->call(ModuleTableSeeder::class);
-        $this->call(RouteTableSeeder::class);
-        $this->call(ActionTableSeeder::class);
+        $this->call(PermissionTableSeeder::class);
+        $this->call(RoleTableSeeder::class);
+        $this->call(UserSuperAdminTableSeeder::class);
 
-        //config relationships
-        // $this->call(ActionRouteTableSeeder::class);
-        $this->call(ActionRouteUserTableSeeder::class);
-        $this->call(ActionRouteUsergroupTableSeeder::class);
+        $env_app = app()->environment();
+        if ($env_app === 'local' || $env_app === 'testing') {
+            $this->call(UserTableSeeder::class);
+        }
     }
 }

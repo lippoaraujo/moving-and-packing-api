@@ -16,15 +16,15 @@ class AddSystemSeeders extends Migration
      */
     public function up()
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
 
-            Artisan::call('module:seed System --force');
+        //     Artisan::call('module:seed System --force');
 
-            DB::commit();
-        } catch(Throwable $ex) {
-            DB::rollBack();
-        }
+        //     DB::commit();
+        // } catch(Throwable $ex) {
+        //     DB::rollBack();
+        // }
     }
 
     /**

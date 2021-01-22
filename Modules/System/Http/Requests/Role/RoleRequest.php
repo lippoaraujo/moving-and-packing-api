@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\System\Http\Requests\Route;
+namespace Modules\System\Http\Requests\Role;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RouteRequest extends FormRequest
+class RoleRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,19 +14,15 @@ class RouteRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|string',
-            'controllers' => 'required|string',
-            'module_id' => 'required|int',
-            'active' => 'int|nullable',
+            'name'          => 'required|unique:roles,name',
+            'permission'    => 'required',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
-            $rules = [
-                'name' => 'string',
-                'controllers' => 'string',
-                'module_id' => 'int',
-                'active' => 'int|nullable',
-            ];
+           $rules = [
+                'name'          => 'required',
+                'permission'    => 'required',
+           ];
         }
 
         return $rules;

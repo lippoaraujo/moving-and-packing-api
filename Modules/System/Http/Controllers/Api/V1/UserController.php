@@ -24,7 +24,6 @@ class UserController extends Controller
     public function __construct(UserService $service)
     {
         $this->service = $service;
-        $this->middleware('can:users');
     }
 
     /**
@@ -33,7 +32,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        $this->authorize('users', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -45,7 +43,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $this->authorize('users', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -57,7 +54,6 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('users', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -70,7 +66,6 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $this->authorize('users', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -82,7 +77,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('users', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

@@ -6,18 +6,18 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Modules\System\Entities\Route;
+use Modules\System\Entities\Role;
 
-class RouteTest extends TestCase
+class RoleTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private const ROUTE_URL = "/api/v1/system/routes";
+    private const ROUTE_URL = "/api/v1/system/roles";
 
     /**
      * @test
      */
-    public function given_route_data_when_posting_returns_route_stored()
+    public function given_role_data_when_posting_returns_role_stored()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -33,7 +33,7 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_incomplete_route_data_when_posting_returns_error()
+    public function given_incomplete_role_data_when_posting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
         $data = $this->getData();
@@ -52,7 +52,7 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_noid_when_getting_route_returns_all_routes_data()
+    public function given_noid_when_getting_role_returns_all_roles_data()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -66,14 +66,14 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_valid_id_when_getting_route_returns_a_route_data()
+    public function given_valid_id_when_getting_role_returns_a_role_data()
     {
-        $route = $this->getValidRoute();
+        $role = $this->getValidRole();
 
         $headers = $this->headers($this->getUserAdmin());
 
         $response = $this->withHeaders($headers)
-        ->json('GET', $this->getRouteId(self::ROUTE_URL, $route->id));
+        ->json('GET', $this->getRouteId(self::ROUTE_URL, $role->id));
 
         $response->assertOk();
         $response->assertJsonStructure($this->getJsonStructure());
@@ -82,7 +82,7 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_notvalid_id_when_getting_route_returns_error()
+    public function given_notvalid_id_when_getting_role_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -96,15 +96,15 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_route_data_withvalid_id_when_putting_returns_true()
+    public function given_role_data_withvalid_id_when_putting_returns_true()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $route = $this->getValidRoute();
-        $route->name = 'name updated';
-        $data = $route->toArray();
+        $role = $this->getValidRole();
+        $role->name = 'name updated';
+        $data = $role->toArray();
 
         $response = $this->withHeaders($headers)
-        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $route->id), $data);
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $role->id), $data);
 
         $response->assertOk();
         $response->assertExactJson(['data' => true]);
@@ -113,12 +113,12 @@ class RouteTest extends TestCase
      /**
      * @test
      */
-    public function given_route_data_with_notvalid_id_when_putting_returns_error()
+    public function given_role_data_with_notvalid_id_when_putting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $route = $this->getValidRoute();
-        $route->name = 'name updated';
-        $data = $route->toArray();
+        $role = $this->getValidRole();
+        $role->name = 'name updated';
+        $data = $role->toArray();
 
         $response = $this->withHeaders($headers)
         ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
@@ -130,13 +130,13 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_valid_route_id_when_deleting_returns_true()
+    public function given_valid_role_id_when_deleting_returns_true()
     {
-        $route = $this->getValidRoute();
+        $role = $this->getValidRole();
         $headers = $this->headers($this->getUserAdmin());
 
         $response = $this->withHeaders($headers)
-        ->json('DELETE', $this->getRouteId(self::ROUTE_URL, $route->id));
+        ->json('DELETE', $this->getRouteId(self::ROUTE_URL, $role->id));
 
         $response->assertOk();
         $response->assertExactJson(['data' => true]);
@@ -145,7 +145,7 @@ class RouteTest extends TestCase
     /**
      * @test
      */
-    public function given_notvalid_route_id_when_deleting_returns_error()
+    public function given_notvalid_role_id_when_deleting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
 
@@ -158,20 +158,20 @@ class RouteTest extends TestCase
 
     private function getData()
     {
-        $route = Route::factory()->make();
-        $data = $route->toArray();
+        $role = Role::factory()->make();
+        $data = $role->toArray();
         return $data;
     }
 
-    private function getValidRoute(bool $toArray = false)
+    private function getValidrole(bool $toArray = false)
     {
-        $route =  Route::all()->first();
+        $role =  Role::all()->first();
 
         if($toArray) {
-            $route = $route->toArray();
+            $role = $role->toArray();
         }
 
-        return $route;
+        return $role;
     }
 
     private function getJsonStructure(bool $hasMany = false)
@@ -181,16 +181,12 @@ class RouteTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                    'controllers',
-                    'module_id',
                     'active',
                 ]];
         } else {
             $json = [
                 'id',
                 'name',
-                'controllers',
-                'module_id',
                 'active',
             ];
         }

@@ -15,15 +15,15 @@ class AddMovingSeeders extends Migration
      */
     public function up()
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
 
-            Artisan::call('module:seed Moving --force');
+        //     Artisan::call('module:seed Moving --force');
 
-            DB::commit();
-        } catch(Throwable $ex) {
-            DB::rollBack();
-        }
+        //     DB::commit();
+        // } catch(Throwable $ex) {
+        //     DB::rollBack();
+        // }
     }
 
     /**

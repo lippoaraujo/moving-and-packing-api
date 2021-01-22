@@ -6,25 +6,29 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Modules\System\Http\Requests\Action\ActionRequest;
-use Modules\System\Services\ActionService;
+use Modules\System\Http\Requests\Role\RoleRequest;
+use Modules\System\Services\RoleService;
 
 /**
- * @group Actions
+ * @group Role
  * @authenticated
  *
- * APIs for managing Actions
+ * APIs for managing roles
  */
-class ActionController extends Controller
+class RoleController extends Controller
 {
     use ApiResponser;
 
     private $service;
 
-    public function __construct(ActionService $service)
+    public function __construct(RoleService $service)
     {
         $this->service = $service;
-        $this->middleware('can:actions');
+
+        $this->middleware('permission:role-list', ['only' => ['index']]);
+        $this->middleware('permission:role-create', ['only' => ['create','store']]);
+        $this->middleware('permission:role-edit', ['only' => ['edit','update','show']]);
+        $this->middleware('permission:role-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -33,7 +37,6 @@ class ActionController extends Controller
      */
     public function index()
     {
-        $this->authorize('actions', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -43,9 +46,8 @@ class ActionController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(ActionRequest $request)
+    public function store(RoleRequest $request)
     {
-        $this->authorize('actions', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -57,7 +59,6 @@ class ActionController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('actions', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -68,9 +69,8 @@ class ActionController extends Controller
      * @param int $id
      * @return Response
      */
-    public function update(ActionRequest $request, $id)
+    public function update(RoleRequest $request, $id)
     {
-        $this->authorize('actions', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -82,7 +82,6 @@ class ActionController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('actions', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

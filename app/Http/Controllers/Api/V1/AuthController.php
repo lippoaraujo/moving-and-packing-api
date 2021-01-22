@@ -49,11 +49,11 @@ class AuthController extends Controller
             return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
-        $user = auth('api')->user();
+        // $user = auth('api')->user();
 
-        $dashboard = $this->dashboard->show($user->id);
+        // $dashboard = $this->dashboard->show($user->id);
 
-        return $this->respondWithToken($token, $dashboard);
+        return $this->respondWithToken($token);
     }
 
     /**

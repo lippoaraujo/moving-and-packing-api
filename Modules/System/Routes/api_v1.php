@@ -19,17 +19,17 @@ Route::group([
     'prefix' => 'system'
 ], function () {
 
+    Route::get('/roles', 'RoleController@index')->middleware('super_admin');
+    Route::post('/roles', 'RoleController@store');
+    Route::get('/roles/{id}', 'RoleController@show');
+    Route::put('/roles/{id}', 'RoleController@update');
+    Route::delete('/roles/{id}', 'RoleController@destroy');
+
     Route::get('/tenants', 'TenantController@index');
     Route::post('/tenants', 'TenantController@store');
     Route::get('/tenants/{id}', 'TenantController@show');
     Route::put('/tenants/{id}', 'TenantController@update');
     Route::delete('/tenants/{id}', 'TenantController@destroy');
-
-    Route::get('/usergroups', 'UsergroupController@index');
-    Route::post('/usergroups', 'UsergroupController@store');
-    Route::get('/usergroups/{id}', 'UsergroupController@show');
-    Route::put('/usergroups/{id}', 'UsergroupController@update');
-    Route::delete('/usergroups/{id}', 'UsergroupController@destroy');
 
     Route::get('/users', 'UserController@index');
     Route::post('/users', 'UserController@store');
@@ -42,18 +42,6 @@ Route::group([
     Route::get('/modules/{id}', 'ModuleController@show');
     Route::put('/modules/{id}', 'ModuleController@update');
     Route::delete('/modules/{id}', 'ModuleController@destroy');
-
-    Route::get('/routes', 'RouteController@index');
-    Route::post('/routes', 'RouteController@store');
-    Route::get('/routes/{id}', 'RouteController@show');
-    Route::put('/routes/{id}', 'RouteController@update');
-    Route::delete('/routes/{id}', 'RouteController@destroy');
-
-    Route::get('/actions', 'ActionController@index');
-    Route::post('/actions', 'ActionController@store');
-    Route::get('/actions/{id}', 'ActionController@show');
-    Route::put('/actions/{id}', 'ActionController@update');
-    Route::delete('/actions/{id}', 'ActionController@destroy');
 
     Route::get('/dashboard', 'DashboardController@show');
 });

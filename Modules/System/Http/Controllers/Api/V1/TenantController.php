@@ -24,7 +24,6 @@ class TenantController extends Controller
     public function __construct(TenantService $service)
     {
         $this->service = $service;
-        $this->middleware('can:tenants');
     }
 
     /**
@@ -33,7 +32,6 @@ class TenantController extends Controller
      */
     public function index()
     {
-        $this->authorize('tenants', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -45,7 +43,6 @@ class TenantController extends Controller
      */
     public function store(TenantRequest $request)
     {
-        $this->authorize('tenants', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -57,7 +54,6 @@ class TenantController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('tenants', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -70,7 +66,6 @@ class TenantController extends Controller
      */
     public function update(TenantRequest $request, $id)
     {
-        $this->authorize('tenants', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -82,7 +77,6 @@ class TenantController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('tenants', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

@@ -18,15 +18,10 @@ class TenantScope
      */
     public function handle($request, Closure $next)
     {
-        //  \Illuminate\Database\Eloquent\Model::clearBootedModels();
-
         if (auth('api')->check()) {
             $user = auth('api')->user();
-
-            if ($user->tenant_id && $user->isTenant()) {
-                Landlord::addTenant('tenant_id', $user->tenant_id);
-                Landlord::applyTenantScopesToDeferredModels();
-            }
+            Landlord::addTenant($user->tenant);
+            Landlord::applyTenantScopesToDeferredModels();
         }
 
         return $next($request);

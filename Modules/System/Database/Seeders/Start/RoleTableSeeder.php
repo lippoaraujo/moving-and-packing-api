@@ -6,11 +6,14 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Modules\System\Database\Seeders\Exceptions\SeedTenantNotFound;
-use \Modules\System\Entities\Usergroup;
+use Modules\System\Database\Seeders\Traits\AdminSync;
 use \Modules\System\Entities\Tenant;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
-class UsergroupTableSeeder extends Seeder
+class RoleTableSeeder extends Seeder
 {
+    use AdminSync;
     /**
      * Run the database seeds.
      *
@@ -23,23 +26,22 @@ class UsergroupTableSeeder extends Seeder
         $tenant = Tenant::first();
 
         if(!empty($tenant)) {
-            $where = [
-                'name'      => 'master',
-                'tenant_id' => $tenant->id,
-            ];
-            $usergroup = Usergroup::where($where)->first();
 
-            if(empty($usergroup)) {
+            $role = Role::where(['name' => 'Admin'])->first();
 
-                $usergroup = Usergroup::factory()->create([
-                    'name' => 'master',
-                    'tenant_id' => $tenant->id,
-                ]);
+            // create role Admin test with all permissions
+            if(empty($role)) {
 
-                $this->command->info("INFO: usergroup was created: {$usergroup->name}");
+                $role = Role::create(['name' => 'Admin']);
+
+                $permissions = Permission::pluck('id','id')->all();
+
+                $role->syncPermissions($permissions);
+
+                $this->command->info("INFO: Role was created: {$role->name}");
 
             } else{
-                $this->command->warn("INFO: usergroup alredy exist: {$usergroup->name}");
+                $this->command->warn("INFO: Role alredy exist: {$role->name}");
             }
 
         } else {

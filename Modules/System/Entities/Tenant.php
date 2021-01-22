@@ -41,19 +41,4 @@ class Tenant extends Model
     {
         return \Modules\System\Database\factories\TenantFactory::new();
     }
-
-    public function users()
-    {
-        return $this->hasManyThrough(User::class, Usergroup::class);
-    }
-
-    public function usergroups()
-    {
-        return $this->hasMany(Usergroup::class);
-    }
-
-    // public function getUsergroupsOfTenant(string $id)
-    // {
-    //     return $this->findOrFail($id)->usergroups()->get();
-    // }
 }

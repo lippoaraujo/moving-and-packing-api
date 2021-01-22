@@ -49,9 +49,4 @@ class Module extends Model
     {
         return \Modules\System\Database\factories\ModuleFactory::new();
     }
-
-    public function routes()
-    {
-        return $this->hasMany(Route::class);
-    }
 }

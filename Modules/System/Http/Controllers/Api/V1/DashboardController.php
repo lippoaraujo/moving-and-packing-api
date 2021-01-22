@@ -23,7 +23,6 @@ class DashboardController extends Controller
     public function __construct(DashboardService $service)
     {
         $this->service = $service;
-        $this->middleware('can:dashboard');
     }
 
     /**
@@ -35,8 +34,6 @@ class DashboardController extends Controller
      */
     public function show(Request $request)
     {
-        $this->authorize('dashboard', 'show');
-
         if (!$request->headers->has('user-id')) {
             return $this->errorResponse('user-id is required on header!');
         }
