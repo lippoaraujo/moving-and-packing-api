@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Modules\System\Services\DashboardService;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
@@ -19,17 +18,16 @@ class AuthController extends Controller
 {
     use ApiResponser;
 
-    protected $dashboard;
+    protected $permission;
 
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct(DashboardService $dasboard)
+    public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login']]);
-        $this->dashboard = $dasboard;
     }
 
     /**
@@ -49,9 +47,7 @@ class AuthController extends Controller
             return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
-        // $user = auth('api')->user();
-
-        // $dashboard = $this->dashboard->show($user->id);
+        // $menuPermissions = $this->permission->getMenuPermissions();
 
         return $this->respondWithToken($token);
     }

@@ -34,7 +34,7 @@ trait ApiResponser
      * @param string $token
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken(string $token, $dashboard = null)
+    protected function respondWithToken(string $token, $menuPermissions = null)
     {
         $json = [
             'token' => $token,
@@ -42,8 +42,8 @@ trait ApiResponser
             'expires_in' => Auth::factory()->getTTL() * 10080 // one week
         ];
 
-        if (!empty($dashboard)) {
-            $json['dashboard'] = $dashboard;
+        if (!empty($menuPermissions)) {
+            $json['menuPermissions'] = $menuPermissions;
         }
 
         return response()->json($json, Response::HTTP_OK);

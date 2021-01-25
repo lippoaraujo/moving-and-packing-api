@@ -20,10 +20,10 @@ class RoleRequest extends FormRequest
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
-           $rules = [
+            $rules = [
                 'name'          => 'required',
                 'permission'    => 'array',
-           ];
+            ];
         }
 
         return $rules;

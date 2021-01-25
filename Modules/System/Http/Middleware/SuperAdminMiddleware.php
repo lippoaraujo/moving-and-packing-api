@@ -3,7 +3,6 @@
 namespace Modules\System\Http\Middleware;
 
 use Closure;
-
 use Modules\System\Exceptions\UnauthorizedException;
 
 class SuperAdminMiddleware

@@ -31,20 +31,14 @@ class UserService extends Controller
      */
     public function store(array $data)
     {
-        if (isset($data['password_confirmation'])) {
-            unset($data['password_confirmation']);
+
+        $user = $this->repo->create($data);
+
+        if (!empty($data['roles'])) {
+             $user->assignRole($data['roles']);
         }
 
-        $userAuth = auth('api')->user()->with('usergroup', 'tenant')->first();
-
-        // if($userAuth->isDefaultUsergroup()) {
-        $data['usergroup_id'] = $userAuth->usergroup->id;
-        $data['tenant_id']    = $userAuth->tenant->id;
-        // } else {
-        //     throw new AccessDeniedHttpException('user not authorized for this action!');
-        // }
-
-        return $this->repo->create($data);
+        return $user;
     }
 
     /**
@@ -65,7 +59,15 @@ class UserService extends Controller
      */
     public function update(array $data, $id)
     {
-        return $this->repo->update($data, $id);
+        $user = $this->show($id);
+
+        $this->repo->update($data, $id);
+
+        if (!empty($data['roles'])) {
+             $user->assignRole($data['roles']);
+        }
+
+        return true;
     }
 
     /**
@@ -76,5 +78,14 @@ class UserService extends Controller
     public function destroy($id)
     {
         return $this->repo->delete($id);
+    }
+
+    /**
+     * Get all user permission.
+     * @return array
+     */
+    public function permission()
+    {
+        return $this->repo->getUserAuthPermissions();
     }
 }

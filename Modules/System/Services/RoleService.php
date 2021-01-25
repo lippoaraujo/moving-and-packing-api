@@ -33,7 +33,7 @@ class RoleService extends Controller
     {
         $role = $this->repo->create(['name' => $data['name']]);
 
-        if(!empty($data['permission'])) {
+        if (!empty($data['permission'])) {
             $role->syncPermissions($data['permission']);
         }
 
@@ -58,7 +58,7 @@ class RoleService extends Controller
      */
     public function update(array $data, $id)
     {
-        $role = $this->repo->findById($id);
+        $role       = $this->repo->findById($id);
         $role->name = $data['name'];
         $role->save();
 

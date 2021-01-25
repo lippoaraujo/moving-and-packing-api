@@ -28,7 +28,10 @@ class RoleTableSeeder extends Seeder
 
             // create role Admin test with all permissions
             if(empty($role)) {
-                $role = Role::create(['name' => 'Seller']);
+                $role = Role::create([
+                    'name' => 'Seller',
+                    'tenant_id' => $tenant->id
+                ]);
 
                 $permissions = [
                     'item-list',

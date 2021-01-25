@@ -7,11 +7,11 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class DashboardTest extends TestCase
+class PermissionTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private const ROUTE_URL = "/api/v1/system/dashboard";
+    private const ROUTE_URL = "/api/v1/system/permissions";
 
     /**
      * @test

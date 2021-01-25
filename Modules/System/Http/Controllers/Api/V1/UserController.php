@@ -86,4 +86,14 @@ class UserController extends Controller
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }
+
+    /**
+     * Get all user permission.
+     * @return Response
+     */
+    public function permission()
+    {
+        $data = $this->service->permission();
+        return $this->successResponse($data);
+    }
 }

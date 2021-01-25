@@ -5,24 +5,16 @@ namespace Modules\System\Providers;
 use Illuminate\Support\ServiceProvider;
 
 use Modules\System\Repositories\Contracts\{
-    ActionRepositoryInterface,
-    DashboardRepositoryInterface,
     ModuleRepositoryInterface,
     RoleRepositoryInterface,
-    RouteRepositoryInterface,
     TenantRepositoryInterface,
-    UsergroupRepositoryInterface,
     UserRepositoryInterface,
 };
 
 use Modules\System\Repositories\Eloquent\{
-    EloquentActionRepository,
-    EloquentDashboardRepository,
     EloquentModuleRepository,
     EloquentRoleRepository,
-    EloquentRouteRepository,
     EloquentTenantRepository,
-    EloquentUsergroupRepository,
     EloquentUserRepository,
 };
 
@@ -52,24 +44,8 @@ class RepositoryServiceProvider extends ServiceProvider
             EloquentTenantRepository::class
         );
         $this->app->bind(
-            UsergroupRepositoryInterface::class,
-            EloquentUsergroupRepository::class
-        );
-        $this->app->bind(
             ModuleRepositoryInterface::class,
             EloquentModuleRepository::class
-        );
-        $this->app->bind(
-            RouteRepositoryInterface::class,
-            EloquentRouteRepository::class
-        );
-        $this->app->bind(
-            ActionRepositoryInterface::class,
-            EloquentActionRepository::class
-        );
-        $this->app->bind(
-            DashboardRepositoryInterface::class,
-            EloquentDashboardRepository::class
         );
         $this->app->bind(
             RoleRepositoryInterface::class,
