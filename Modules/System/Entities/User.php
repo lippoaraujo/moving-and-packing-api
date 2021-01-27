@@ -4,6 +4,7 @@ namespace Modules\System\Entities;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -13,7 +14,12 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, UserACL, BelongsToTenants, HasRoles;
+    use HasFactory,
+        Notifiable,
+        UserACL,
+        BelongsToTenants,
+        HasRoles,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -26,7 +32,6 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'usergroup_id',
         'tenant_id',
-        'active'
     ];
 
     /**

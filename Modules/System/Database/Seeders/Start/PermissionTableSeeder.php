@@ -3,7 +3,7 @@
 namespace Modules\System\Database\Seeders\Start;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
+use Modules\System\Entities\Permission;
 
 class PermissionTableSeeder extends Seeder
 {

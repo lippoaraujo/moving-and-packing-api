@@ -4,7 +4,7 @@ namespace Modules\Moving\Database\Seeders\Start;
 
 use Illuminate\Database\Seeder;
 use Modules\System\Database\Seeders\Traits\AdminSync;
-use Spatie\Permission\Models\Permission;
+use Modules\System\Entities\Permission;
 
 class PermissionTableSeeder extends Seeder
 {

@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Modules\System\Database\Seeders\Exceptions\SeedTenantNotFound;
 use Modules\System\Database\Seeders\Traits\AdminSync;
+use Modules\System\Entities\Permission;
 use \Modules\System\Entities\Tenant;
-use Spatie\Permission\Models\Permission;
 use Modules\System\Entities\Role;
 class RoleTableSeeder extends Seeder
 {

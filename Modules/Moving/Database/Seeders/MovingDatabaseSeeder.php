@@ -12,6 +12,7 @@ use Modules\Moving\Database\Seeders\Start\{
     OrderTableSeeder,
     PackingTableSeeder,
     PermissionTableSeeder,
+    PlanHasModulesTableSeeder,
     RoleTableSeeder,
     RoomTableSeeder,
     UserTableSeeder,
@@ -29,6 +30,7 @@ class MovingDatabaseSeeder extends Seeder
         Model::unguard();
 
         $this->call(ModuleTableSeeder::class);
+        $this->call(PlanHasModulesTableSeeder::class);
         $this->call(PermissionTableSeeder::class);
         $this->call(RoleTableSeeder::class);
 

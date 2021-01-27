@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\System\Database\Seeders\Start\{
     ModuleTableSeeder,
     PermissionTableSeeder,
+    PlanTableSeeder,
     RoleTableSeeder,
     TenantTableSeeder,
     UserSuperAdminTableSeeder,
@@ -24,9 +25,9 @@ class SystemDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        //config users
-        $this->call(TenantTableSeeder::class);
         $this->call(ModuleTableSeeder::class);
+        $this->call(PlanTableSeeder::class);
+        $this->call(TenantTableSeeder::class);
         $this->call(PermissionTableSeeder::class);
         $this->call(RoleTableSeeder::class);
         $this->call(UserSuperAdminTableSeeder::class);

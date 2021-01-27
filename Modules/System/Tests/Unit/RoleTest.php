@@ -181,13 +181,11 @@ class RoleTest extends TestCase
                 '*' => [
                     'id',
                     'name',
-                    'active',
                 ]];
         } else {
             $json = [
                 'id',
                 'name',
-                'active',
             ];
         }
 

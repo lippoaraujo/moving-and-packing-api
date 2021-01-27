@@ -105,9 +105,9 @@ class AuthTest extends TestCase
                 'id',
                 'name',
                 'email',
-                'usergroup_id',
                 'tenant_id',
-                'active'
+                'roles',
+                'tenant'
             ]
         ]);
     }
@@ -133,7 +133,7 @@ class AuthTest extends TestCase
         ];
 
         if($dasboard) {
-            array_push($json, 'dashboard');
+            array_push($json, 'permissions');
         }
 
         return $json;

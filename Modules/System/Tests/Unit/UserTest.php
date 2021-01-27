@@ -171,16 +171,12 @@ class UserTest extends TestCase
                     'id',
                     'name',
                     'email',
-                    'usergroup_id',
-                    'active'
                 ]];
         } else {
             $json = [
                 'id',
                 'name',
                 'email',
-                'usergroup_id',
-                'active'
             ];
         }
 

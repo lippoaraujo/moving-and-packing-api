@@ -4,10 +4,11 @@ namespace Modules\System\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tenant extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +21,7 @@ class Tenant extends Model
         'name',
         'trading_name',
         'email',
-        'active',
+        'plan_id',
     ];
 
     /**
@@ -40,5 +41,10 @@ class Tenant extends Model
     protected static function newFactory()
     {
         return \Modules\System\Database\factories\TenantFactory::new();
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\System\Services\UserService;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
@@ -18,16 +19,17 @@ class AuthController extends Controller
 {
     use ApiResponser;
 
-    protected $permission;
+    protected $userService;
 
     /**
      * Create a new AuthController instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth:api', ['except' => ['login']]);
+        $this->userService = $userService;
     }
 
     /**
@@ -47,9 +49,9 @@ class AuthController extends Controller
             return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
-        // $menuPermissions = $this->permission->getMenuPermissions();
+        $allPermissions = $this->userService->permission();
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $allPermissions);
     }
 
     /**
@@ -61,7 +63,7 @@ class AuthController extends Controller
      */
     public function user()
     {
-        return $this->successResponse(auth('api')->user()->load('usergroup', 'tenant'));
+        return $this->successResponse(auth('api')->user()->load('roles', 'tenant'));
     }
 
     /**

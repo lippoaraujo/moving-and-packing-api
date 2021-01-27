@@ -21,7 +21,6 @@ class ModuleRequest extends FormRequest
             'order'         => 'int|nullable',
             'color'         => 'string|nullable',
             'image'         => 'string|nullable',
-            'active'        => 'int',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
@@ -32,7 +31,6 @@ class ModuleRequest extends FormRequest
                 'order'         => 'int|nullable',
                 'color'         => 'string|nullable',
                 'image'         => 'string|nullable',
-                'active'        => 'int',
             ];
         }
 

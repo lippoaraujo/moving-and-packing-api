@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Modules\System\Entities\Permission;
 
 class PermissionTest extends TestCase
 {
@@ -16,15 +17,63 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function given_valid_user_id_header_when_getting_dashboard_returns_a_dashboard_data()
+    public function given_permission_data_when_posting_returns_permission_stored()
     {
-        $user = $this->getUserAdmin();
+        $headers = $this->headers($this->getUserAdmin());
 
-        $headers = $this->headers($user);
-        $headers['user_id'] = $user->id;
+        $data = $this->getData();
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $data);
+
+        $response->assertCreated();
+        $response->assertJsonStructure($this->getJsonStructure());
+    }
+
+    /**
+     * @test
+     */
+    public function given_incomplete_permission_data_when_posting_returns_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $data = $this->getData();
+
+        if(isset($data['name'])) {
+            unset($data['name']);
+        }
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $data);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function given_noid_when_getting_permission_returns_all_permissions_data()
+    {
+        $headers = $this->headers($this->getUserAdmin());
 
         $response = $this->withHeaders($headers)
         ->json('GET', self::ROUTE_URL);
+
+        $response->assertOk();
+        $response->assertJsonStructure($this->getJsonStructure(true));
+    }
+
+    /**
+     * @test
+     */
+    public function given_valid_id_when_getting_permission_returns_a_permission_data()
+    {
+        $permission = $this->getValidPermission();
+
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('GET', $this->getRouteId(self::ROUTE_URL, $permission->id));
 
         $response->assertOk();
         $response->assertJsonStructure($this->getJsonStructure());
@@ -33,75 +82,114 @@ class PermissionTest extends TestCase
     /**
      * @test
      */
-    public function given_no_userid_on_header_when_getting_dashboard_returns_error()
+    public function given_notvalid_id_when_getting_permission_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
 
         $response = $this->withHeaders($headers)
-        ->json('GET', self::ROUTE_URL);
+        ->json('GET', $this->getRouteId(self::ROUTE_URL));
 
-        $response->assertStatus(400);
-        $response->assertExactJson([
-            'message' => 'user-id is required on header!',
-            'code' => 400
-        ]);
+        $response->assertNotFound();
+        $response->assertJsonStructure(['message',]);
     }
 
     /**
      * @test
      */
-    public function given_notvalid_user_id_on_header_when_getting_dashboard_returns_error()
+    public function given_permission_data_withvalid_id_when_putting_returns_true()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $headers['user_id'] = $this->getInvalidId();
+        $permission = $this->getValidPermission();
+        $permission->name = 'name updated';
+        $data = $permission->toArray();
 
         $response = $this->withHeaders($headers)
-        ->json('GET', self::ROUTE_URL);
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $permission->id), $data);
 
-        $response->assertNotFound();
-        $response->assertJsonStructure([
-            'message',
-        ]);
+        $response->assertOk();
+        $response->assertExactJson(['data' => true]);
     }
 
-    private function getJsonStructure()
+     /**
+     * @test
+     */
+    public function given_permission_data_with_notvalid_id_when_putting_returns_error()
     {
-        $json = [
-            'modules' => [
+        $headers = $this->headers($this->getUserAdmin());
+        $permission = $this->getValidPermission();
+        $permission->name = 'name updated';
+        $data = $permission->toArray();
+
+        $response = $this->withHeaders($headers)
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
+
+        $response->assertNotFound();
+        $response->assertJsonStructure(['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function given_valid_permission_id_when_deleting_returns_true()
+    {
+        $permission = $this->getValidPermission();
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('DELETE', $this->getRouteId(self::ROUTE_URL, $permission->id));
+
+        $response->assertOk();
+        $response->assertExactJson(['data' => true]);
+    }
+
+    /**
+     * @test
+     */
+    public function given_notvalid_permission_id_when_deleting_returns_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+
+        $response = $this->withHeaders($headers)
+        ->json('DELETE', $this->getRouteId(self::ROUTE_URL));
+
+        $response->assertNotFound();
+        $response->assertJsonStructure(['message']);
+    }
+
+    private function getData()
+    {
+        $permission = Permission::factory()->make();
+        $data = $permission->toArray();
+        return $data;
+    }
+
+    private function getValidpermission(bool $toArray = false)
+    {
+        $permission =  Permission::all()->first();
+
+        if($toArray) {
+            $permission = $permission->toArray();
+        }
+
+        return $permission;
+    }
+
+    private function getJsonStructure(bool $hasMany = false)
+    {
+        if($hasMany) {
+            $json = [
                 '*' => [
+                    'id',
+                    'name',
+                ]];
+        } else {
+            $json = [
                 'id',
                 'name',
-                'description',
-                'parent_module',
-                'image',
-                'active',
-                'routes_permissions' => [
-                    '*' => [
-                        'id',
-                        'name',
-                        'controllers',
-                        'module_id',
-                        'active',
-                        'actions' => [
-                            '*' => [
-                                'id',
-                                'name',
-                                'type',
-                                'active',
-                                'pivot' => [
-                                    'route_id',
-                                    'action_id'
-                                ],
-                            ],
-                        ],
-                        ],
-                    ],
-                ],
-            ]
-        ];
+            ];
+        }
 
         $data['data'] = $json;
-
         return $data;
     }
 }

@@ -1,33 +1,33 @@
 <?php
 
-namespace $NAMESPACE$;
+namespace Modules\System\Http\Controllers\Api\V1;
 
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Modules\$STUDLY_NAME$\Http\Requests\$SERVICE$\$SERVICE$Request;
-use Modules\$STUDLY_NAME$\Services\$SERVICE$Service;
+use Modules\System\Http\Requests\Permission\PermissionRequest;
+use Modules\System\Services\PermissionService;
 
 /**
- * @group $SERVICE$
+ * @group Permission
  * @authenticated
  *
- * APIs for managing $PLURAL_LOWER$
+ * APIs for managing permissions
  */
-class $NAME$ extends Controller
+class PermissionController extends Controller
 {
     use ApiResponser;
 
     private $service;
 
-    public function __construct($SERVICE$Service $service)
+    public function __construct(PermissionService $service)
     {
-        $this->middleware('permission:$SERVICE_LOWER$-list', ['only'    => ['index']]);
-        $this->middleware('permission:$SERVICE_LOWER$-create', ['only'  => ['store']]);
-        $this->middleware('permission:$SERVICE_LOWER$-show', ['only'    => ['show']]);
-        $this->middleware('permission:$SERVICE_LOWER$-edit', ['only'    => ['update']]);
-        $this->middleware('permission:$SERVICE_LOWER$-delete', ['only'  => ['destroy']]);
+        $this->middleware('permission:permission-list', ['only'    => ['index']]);
+        $this->middleware('permission:permission-create', ['only'  => ['store']]);
+        $this->middleware('permission:permission-show', ['only'    => ['show']]);
+        $this->middleware('permission:permission-edit', ['only'    => ['update']]);
+        $this->middleware('permission:permission-delete', ['only'  => ['destroy']]);
 
         $this->service = $service;
     }
@@ -47,7 +47,7 @@ class $NAME$ extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store($SERVICE$Request $request)
+    public function store(PermissionRequest $request)
     {
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
@@ -70,7 +70,7 @@ class $NAME$ extends Controller
      * @param int $id
      * @return Response
      */
-    public function update($SERVICE$Request $request, $id)
+    public function update(PermissionRequest $request, $id)
     {
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);

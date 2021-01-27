@@ -3,17 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
 Route::group([
     'middleware' => ['apiJwt', 'landlord'],
     'prefix' => 'system'
@@ -47,7 +36,8 @@ Route::group([
         'destroy'   => 'roles.destroy'
     ]);
 
-    // Route::get('/users/permissions', 'UserController@permission')->name('users.permission');
+    Route::get('/users/permissions', 'UserController@permission')->name('users.permission');
+
     Route::apiResource('/users', 'UserController')->names([
         'index'     => 'users.index',
         'store'     => 'users.store',
@@ -56,5 +46,11 @@ Route::group([
         'destroy'   => 'users.destroy'
     ]);
 
-    // Route::get('/permissions', 'DashboardController@list')->name('dashboard-show');
+    Route::apiResource('/permissions', 'PermissionController')->names([
+        'index'     => 'permissions.index',
+        'store'     => 'permissions.store',
+        'show'      => 'permissions.show',
+        'update'    => 'permissions.update',
+        'destroy'   => 'permissions.destroy'
+    ]);
 });

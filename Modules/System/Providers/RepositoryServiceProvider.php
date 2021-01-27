@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 use Modules\System\Repositories\Contracts\{
     ModuleRepositoryInterface,
+    PermissionRepositoryInterface,
     RoleRepositoryInterface,
     TenantRepositoryInterface,
     UserRepositoryInterface,
@@ -13,6 +14,7 @@ use Modules\System\Repositories\Contracts\{
 
 use Modules\System\Repositories\Eloquent\{
     EloquentModuleRepository,
+    EloquentPermissionRepository,
     EloquentRoleRepository,
     EloquentTenantRepository,
     EloquentUserRepository,
@@ -50,6 +52,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             RoleRepositoryInterface::class,
             EloquentRoleRepository::class
+        );
+        $this->app->bind(
+            PermissionRepositoryInterface::class,
+            EloquentPermissionRepository::class
         );
     }
 

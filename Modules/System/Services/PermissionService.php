@@ -3,14 +3,13 @@
 namespace Modules\System\Services;
 
 use Illuminate\Routing\Controller;
-use Spatie\Permission\Models\Role;
-use Modules\System\Repositories\Contracts\RoleRepositoryInterface;
+use Modules\System\Repositories\Contracts\PermissionRepositoryInterface;
 
-class RoleService extends Controller
+class PermissionService extends Controller
 {
     private $repo;
 
-    public function __construct(RoleRepositoryInterface $repo)
+    public function __construct(PermissionRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
@@ -21,33 +20,27 @@ class RoleService extends Controller
      */
     public function index()
     {
-        return $this->repo->relationships('permissions')->getAll();
+        return $this->repo->getAll();
     }
 
     /**
      * Store a newly created resource in storage.
      * @param array $request
-     * @return Role
+     * @return Permission
      */
     public function store(array $data)
     {
-        $role = $this->repo->create(['name' => $data['name']]);
-
-        if (!empty($data['permission'])) {
-            $role->syncPermissions($data['permission']);
-        }
-
-        return $role;
+        return $this->repo->create($data);
     }
 
     /**
      * Show the specified resource.
      * @param int $id
-     * @return Role
+     * @return Permission
      */
     public function show(string $id)
     {
-        return $this->repo->relationships('permissions')->findById($id);
+        return $this->repo->findById($id);
     }
 
     /**
@@ -58,15 +51,7 @@ class RoleService extends Controller
      */
     public function update(array $data, $id)
     {
-        $role       = $this->repo->findById($id);
-        $role->name = $data['name'];
-        $role->save();
-
-        if(!empty($data['permission'])) {
-            $role->syncPermissions();
-        }
-
-        return true;
+        return $this->repo->update($data, $id);
     }
 
     /**

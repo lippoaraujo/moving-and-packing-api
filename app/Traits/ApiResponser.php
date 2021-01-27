@@ -34,16 +34,19 @@ trait ApiResponser
      * @param string $token
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken(string $token, $menuPermissions = null)
+    protected function respondWithToken(string $token, $allPermissions = null)
     {
+
         $json = [
             'token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 10080 // one week
+            'expires_in' => Auth::factory()->getTTL()
         ];
 
-        if (!empty($menuPermissions)) {
-            $json['menuPermissions'] = $menuPermissions;
+        $json = collect($json);
+
+        if (!empty($allPermissions)) {
+            $json = $json->merge($allPermissions);
         }
 
         return response()->json($json, Response::HTTP_OK);
