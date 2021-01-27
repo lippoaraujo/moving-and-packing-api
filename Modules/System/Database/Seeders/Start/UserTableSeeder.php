@@ -4,13 +4,11 @@ namespace Modules\System\Database\Seeders\Start;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
-use \Modules\System\Entities\Usergroup;
 use \Modules\System\Entities\User;
 
-use Faker\Generator as Faker;
-use Faker\Provider\Internet as FakeInternet;
 use Illuminate\Http\Response;
-use Modules\System\Database\Seeders\Exceptions\SeedUsergroupNotFound;
+use Modules\System\Database\Seeders\Exceptions\SeedUserRoleNotFound;
+use Spatie\Permission\Models\Role;
 
 class UserTableSeeder extends Seeder
 {
@@ -23,27 +21,29 @@ class UserTableSeeder extends Seeder
     {
         Model::unguard();
 
-        $usergroup = Usergroup::where('name', 'master')->first();
+        //create user with Admin group Test
+        $role = Role::where('name', 'Admin')->first();
 
-        if (!empty($usergroup)) {
+        if (!empty($role)) {
 
-            $user = User::where('usergroup_id', $usergroup->id)->first();
+            $user = User::where('name', 'UserTest')->first();
 
             if (empty($user)) {
 
-                $email = config('api.apiEmail');
-                $pass  = config('api.apiPassword');
+                $email = 'usertest@gmail.com';
+                $pass  = 'usertest@gmail.com';
 
-                $user = User::factory()->create([
-                    'name' => 'admin',
-                    'usergroup_id' => $usergroup->id,
-                    'tenant_id' => $usergroup->tenant->id,
+                $user = User::create([
+                    'name' => 'UserTest',
                     'email' => $email,
                     'password' => $pass,
+                    'tenant_id' => 1,
                 ]);
 
+                $user->assignRole([$role->id]);
+
                 $this->command->info(" ");
-                $this->command->info("User was created: {$user->name} from group {$usergroup->name}");
+                $this->command->info("User Admin test was created: {$user->name}");
                 $this->command->info("=========================");
                 $this->command->info("E-mail: " . $user->email);
                 $this->command->info("Pass: " . $pass);
@@ -53,9 +53,9 @@ class UserTableSeeder extends Seeder
                 $this->command->warn("INFO: User {$user->name} alredy exist: {$user->email}");
             }
         } else {
-            $message = 'ERROR: Usergroup not found!';
+            $message = 'ERROR: Role not found!';
             $this->command->error($message);
-            throw new SeedUsergroupNotFound($message, Response::HTTP_NOT_FOUND);
+            throw new SeedUserRoleNotFound($message, Response::HTTP_NOT_FOUND);
         }
     }
 }

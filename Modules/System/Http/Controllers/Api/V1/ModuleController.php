@@ -23,8 +23,13 @@ class ModuleController extends Controller
 
     public function __construct(ModuleService $service)
     {
+        $this->middleware('permission:module-list', ['only' => ['index']]);
+        $this->middleware('permission:module-create', ['only' => ['store']]);
+        $this->middleware('permission:module-show', ['only' => ['show']]);
+        $this->middleware('permission:module-edit', ['only' => ['update']]);
+        $this->middleware('permission:module-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
-        $this->middleware('can:modules');
     }
 
     /**
@@ -33,7 +38,6 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $this->authorize('modules', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -45,7 +49,6 @@ class ModuleController extends Controller
      */
     public function store(ModuleRequest $request)
     {
-        $this->authorize('modules', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -57,7 +60,6 @@ class ModuleController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('modules', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -70,7 +72,6 @@ class ModuleController extends Controller
      */
     public function update(ModuleRequest $request, $id)
     {
-        $this->authorize('modules', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -82,7 +83,6 @@ class ModuleController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('modules', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

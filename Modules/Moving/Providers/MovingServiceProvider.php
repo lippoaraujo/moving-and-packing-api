@@ -3,26 +3,6 @@
 namespace Modules\Moving\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
-use Modules\Moving\Entities\{
-    Customer,
-    Item,
-    Order,
-    Room,
-    Address,
-    Image,
-    Packing
-};
-use Modules\Moving\Entities\Observers\{
-    CustomerObserver,
-    ItemObserver,
-    OrderObserver,
-    RoomObserver,
-    AddressObserver,
-    ImageObserver,
-    PackingObserver
-};
-
 class MovingServiceProvider extends ServiceProvider
 {
     /**
@@ -46,7 +26,6 @@ class MovingServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
-        $this->registerObservers();
     }
 
     /**
@@ -127,16 +106,5 @@ class MovingServiceProvider extends ServiceProvider
             }
         }
         return $paths;
-    }
-
-    private function registerObservers()
-    {
-        Customer::observe(CustomerObserver::class);
-        Room::observe(RoomObserver::class);
-        Item::observe(ItemObserver::class);
-        Order::observe(OrderObserver::class);
-        Address::observe(AddressObserver::class);
-        Image::observe(ImageObserver::class);
-        Packing::observe(PackingObserver::class);
     }
 }

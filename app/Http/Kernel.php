@@ -66,6 +66,9 @@ class Kernel extends HttpKernel
         'apiJwt' => \App\Http\Middleware\ApiProtectedRoute::class,
         'landlord' => \App\Http\Middleware\TenantScope::class,
         'api_version' => \App\Http\Middleware\APIVersion::class,
-
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+	    'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        'super_admin' => \Modules\System\Http\Middleware\SuperAdminMiddleware::class
     ];
 }

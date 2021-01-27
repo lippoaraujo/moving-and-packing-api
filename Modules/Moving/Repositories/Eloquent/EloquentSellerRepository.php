@@ -14,15 +14,8 @@ class EloquentSellerRepository extends BaseEloquentRepository implements SellerR
 
     public function getAllSellers()
     {
-        $tenant = auth('api')->user()->tenant;
-
-        $sellersUsegroup = $tenant->usergroups->where('name', 'seller')->first();
-
-        if (!empty($sellersUsegroup)) {
-            $sellers = $tenant->usergroups->where('name', 'seller')->first()->users;
-        } else {
-            $sellers = [];
-        }
+        $user    = auth('api')->user();
+        $sellers = $user->role('Seller')->get();
 
         return $sellers;
     }

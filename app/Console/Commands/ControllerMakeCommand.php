@@ -88,6 +88,7 @@ class ControllerMakeCommand extends GeneratorCommand
             'NAMESPACE'         => $this->getClassNamespace($module),
             'CLASS'             => $this->getClass(),
             'SERVICE'           => Str::studly($this->argument('controller')),
+            'SERVICE_LOWER'     => Str::lower($this->argument('controller')),
             'PLURAL_LOWER'      => Str::lower(Str::plural($this->argument('controller'))),
             'LOWER_NAME'        => $module->getLowerName(),
             'MODULE'            => $this->getModuleName(),

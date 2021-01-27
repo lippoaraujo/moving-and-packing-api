@@ -183,7 +183,6 @@ class RoomTest extends TestCase
                     'name',
                     'description',
                     'tenant_id',
-                    'active',
                 ]];
         } else {
             $json = [
@@ -191,7 +190,6 @@ class RoomTest extends TestCase
                 'name',
                 'description',
                 'tenant_id',
-                'active',
             ];
         }
 

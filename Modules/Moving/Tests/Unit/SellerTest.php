@@ -6,7 +6,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Modules\Moving\Entities\Seller;
 
 class SellerTest extends TestCase
 {
@@ -37,7 +36,6 @@ class SellerTest extends TestCase
                     'name',
                     'email',
                     'email_verified_at',
-                    'usergroup_id',
                 ]];
         } else {
             $json = [
@@ -45,7 +43,6 @@ class SellerTest extends TestCase
                 'name',
                 'email',
                 'email_verified_at',
-                'usergroup_id',
             ];
         }
 

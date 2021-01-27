@@ -31,7 +31,6 @@ class ModuleFactory extends Factory
             'order'         => $order,
             'color'         => $this->faker->colorName(),
             'image'         => $this->faker->imageUrl(),
-            'active'        => $this->faker->randomElement([1]),
         ];
     }
 }
