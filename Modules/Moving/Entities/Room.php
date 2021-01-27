@@ -4,11 +4,12 @@ namespace Modules\Moving\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Torzer\Awesome\Landlord\BelongsToTenants;
 
 class Room extends Model
 {
-    use HasFactory, BelongsToTenants;
+    use HasFactory, BelongsToTenants, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +19,6 @@ class Room extends Model
     protected $fillable = [
         'name',
         'description',
-        'active',
         'tenant_id'
     ];
 

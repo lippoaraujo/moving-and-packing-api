@@ -16,8 +16,8 @@ class EloquentUserRepository extends BaseEloquentRepository implements UserRepos
 
     public function getUserAuthPermissions(): Collection
     {
-        $user = auth('api')->user();
-        $tenantPlan = $user->tenant->plan;
+        $user        = auth('api')->user();
+        $tenantPlan  = $user->tenant->plan;
         $modulesAble = $tenantPlan->modules;
 
         $permissions['permissions'] = [

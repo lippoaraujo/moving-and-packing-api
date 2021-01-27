@@ -39,6 +39,8 @@ class UserTableSeeder extends Seeder
                     'password' => $pass,
                 ]);
 
+                $user->assignRole($role->id);
+
                 $this->command->info(" ");
                 $this->command->info("User was created: {$user->name} with Role {$role->name}");
                 $this->command->info("=========================");

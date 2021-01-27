@@ -218,16 +218,13 @@ class OrderTest extends TestCase
                         'email',
                         'phone',
                         'primary_address_id',
-                        'active',
                         'tenant_id'
                     ],
                     'user' => [
                         'id',
                         'name',
                         'email',
-                        'usergroup_id',
                         'tenant_id',
-                        'active'
                     ],
                     'order_rooms' => [
                         '*' => [
@@ -248,7 +245,6 @@ class OrderTest extends TestCase
                                     'description',
                                     'cubic_feet',
                                     'tag',
-                                    'active',
                                     'pivot' => [
                                         'order_room_id',
                                         'item_id',
@@ -303,16 +299,13 @@ class OrderTest extends TestCase
                     'email',
                     'phone',
                     'primary_address_id',
-                    'active',
                     'tenant_id'
                 ],
                 'user' => [
                     'id',
                     'name',
                     'email',
-                    'usergroup_id',
                     'tenant_id',
-                    'active'
                 ],
                 'order_rooms' => [
                         '*' => [
@@ -333,7 +326,6 @@ class OrderTest extends TestCase
                                     'description',
                                     'cubic_feet',
                                     'tag',
-                                    'active',
                                     'pivot' => [
                                         'order_room_id',
                                         'item_id',

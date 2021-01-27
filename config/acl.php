@@ -7,7 +7,7 @@ return [
     ],
 
     'usergroups' => [
-        'default' => 'master'
+        'default' => 'Master'
     ],
 
 ];

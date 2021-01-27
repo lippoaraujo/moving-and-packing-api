@@ -62,7 +62,7 @@ class RoleService extends Controller
         $role->name = $data['name'];
         $role->save();
 
-        if(!empty($data['permission'])) {
+        if (!empty($data['permission'])) {
             $role->syncPermissions();
         }
 

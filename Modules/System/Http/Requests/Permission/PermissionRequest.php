@@ -18,9 +18,9 @@ class PermissionRequest extends FormRequest
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
-           $rules = [
+            $rules = [
                'name'          => 'string',
-           ];
+            ];
         }
 
         return $rules;

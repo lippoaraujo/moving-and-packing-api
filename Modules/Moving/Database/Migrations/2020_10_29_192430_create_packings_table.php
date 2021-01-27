@@ -22,6 +22,7 @@ class CreatePackingsTable extends Migration
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
