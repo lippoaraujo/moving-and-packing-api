@@ -20,10 +20,19 @@ class EloquentUserRepository extends BaseEloquentRepository implements UserRepos
         $tenantPlan  = $user->tenant->plan;
         $modulesAble = $tenantPlan->modules;
 
-        $permissions['permissions'] = [
-            'can'           => $user->getAllPermissions(),
-            'plan_modules'  => $modulesAble
-        ];
+        if ($user->isSuperAdmin()) {
+            $permissions['permissions'] = true;
+        } elseif ($user->isTenant() && $user->isMasterTenantRole()) {
+            $permissions['permissions'] = [
+                'can'           => true,
+                'plan_modules'  => $modulesAble
+            ];
+        } else {
+            $permissions['permissions'] = [
+                'can'           => $user->isSuperAdmin() ? true : $user->getAllPermissions(),
+                'plan_modules'  => $user->isSuperAdmin() ? true : $modulesAble
+            ];
+        }
 
         return collect($permissions);
     }

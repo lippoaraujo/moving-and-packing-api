@@ -7,8 +7,6 @@ use Modules\System\Entities\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Modules\System\Entities\Route;
-use Modules\System\Entities\Action;
 use Modules\System\Entities\Tenant;
 use Modules\System\Repositories\Contracts\TenantRepositoryInterface;
 use Spatie\Permission\Models\Role;
@@ -20,13 +18,9 @@ class TenantService extends Controller
     private $roleService;
     private $userService;
 
-    public function __construct(
-        TenantRepositoryInterface $repo,
-        RoleService $roleService,
-        UserService $userService
-    )
+    public function __construct(TenantRepositoryInterface $repo, RoleService $roleService, UserService $userService)
     {
-        $this->repo = $repo;
+        $this->repo        = $repo;
         $this->roleService = $roleService;
         $this->userService = $userService;
     }
@@ -51,13 +45,13 @@ class TenantService extends Controller
 
             $tenant = $this->repo->create($data);
 
-            $defaultTenantRole  = $this->createTenantRole($tenant, 'Master');
-            $defaultTenantUser  = $this->createDefaultTenantUser($tenant, $defaultTenantRole, $data['password']);
+            $defaultTenantRole = $this->createTenantRole($tenant, 'Master');
+            $defaultTenantUser = $this->createDefaultTenantUser($tenant, $defaultTenantRole, $data['password']);
 
             DB::commit();
 
-            $tenant->default_role   = $defaultTenantRole;
-            $tenant->default_user   = $defaultTenantUser;
+            $tenant->default_role = $defaultTenantRole;
+            $tenant->default_user = $defaultTenantUser;
         } catch (Throwable $ex) {
             DB::rollback();
             throw new Exception("error on creating tenant base structure: {$ex->getMessage()}");

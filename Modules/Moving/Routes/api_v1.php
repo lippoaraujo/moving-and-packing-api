@@ -19,41 +19,53 @@ Route::group([
     'prefix' => 'moving'
 ], function () {
 
-    Route::get('/customers', 'CustomerController@index');
-    Route::post('/customers', 'CustomerController@store');
-    Route::get('/customers/{id}', 'CustomerController@show');
-    Route::put('/customers/{id}', 'CustomerController@update');
-    Route::delete('/customers/{id}', 'CustomerController@destroy');
+    Route::apiResource('/customers', 'CustomerController')->names([
+        'index'     => 'customers.index',
+        'store'     => 'customers.store',
+        'show'      => 'customers.show',
+        'update'    => 'customers.update',
+        'destroy'   => 'customers.destroy'
+    ]);
 
-    Route::get('/rooms', 'RoomController@index');
-    Route::post('/rooms', 'RoomController@store');
-    Route::get('/rooms/{id}', 'RoomController@show');
-    Route::put('/rooms/{id}', 'RoomController@update');
-    Route::delete('/rooms/{id}', 'RoomController@destroy');
+    Route::apiResource('/rooms', 'RoomController')->names([
+        'index'     => 'rooms.index',
+        'store'     => 'rooms.store',
+        'show'      => 'rooms.show',
+        'update'    => 'rooms.update',
+        'destroy'   => 'rooms.destroy'
+    ]);
 
-    Route::get('/items', 'ItemController@index');
-    Route::post('/items', 'ItemController@store');
-    Route::get('/items/{id}', 'ItemController@show');
-    Route::put('/items/{id}', 'ItemController@update');
-    Route::delete('/items/{id}', 'ItemController@destroy');
+    Route::apiResource('/items', 'ItemController')->names([
+        'index'     => 'items.index',
+        'store'     => 'items.store',
+        'show'      => 'items.show',
+        'update'    => 'items.update',
+        'destroy'   => 'items.destroy'
+    ]);
 
-    Route::get('/orders', 'OrderController@index');
-    Route::post('/orders', 'OrderController@store');
-    Route::get('/orders/{id}', 'OrderController@show');
-    Route::put('/orders/{id}', 'OrderController@update');
-    Route::delete('/orders/{id}', 'OrderController@destroy');
+    Route::apiResource('/orders', 'OrderController')->names([
+        'index'     => 'orders.index',
+        'store'     => 'orders.store',
+        'show'      => 'orders.show',
+        'update'    => 'orders.update',
+        'destroy'   => 'orders.destroy'
+    ]);
 
-    Route::get('/images', 'ImageController@index');
-    Route::post('/images', 'ImageController@store');
-    Route::get('/images/{id}', 'ImageController@show');
-    Route::put('/images/{id}', 'ImageController@update');
-    Route::delete('/images/{id}', 'ImageController@destroy');
+    Route::apiResource('/images', 'ImageController')->names([
+        'index'     => 'images.index',
+        'store'     => 'images.store',
+        'show'      => 'images.show',
+        'update'    => 'images.update',
+        'destroy'   => 'images.destroy'
+    ]);
 
-    Route::get('/sellers', 'SellerController@index');
+    Route::get('/sellers', 'SellerController@index')->name('sellers.index');
 
-    Route::get('/packings', 'PackingController@index');
-    Route::post('/packings', 'PackingController@store');
-    Route::get('/packings/{id}', 'PackingController@show');
-    Route::put('/packings/{id}', 'PackingController@update');
-    Route::delete('/packings/{id}', 'PackingController@destroy');
+    Route::apiResource('/packings', 'PackingController')->names([
+        'index'     => 'packings.index',
+        'store'     => 'packings.store',
+        'show'      => 'packings.show',
+        'update'    => 'packings.update',
+        'destroy'   => 'packings.destroy'
+    ]);
 });

@@ -2,8 +2,7 @@
 
 namespace Modules\System\Entities\Traits;
 
-use Illuminate\Support\Str;
-use Modules\System\Entities\Route;
+use Modules\System\Entities\Role;
 
 Trait UserACL
 {
@@ -17,8 +16,8 @@ Trait UserACL
         return !in_array($this->email, config('acl.admins'));
     }
 
-    public function isDefaultTenantRole(string $roleName): bool
+    public function isMasterTenantRole(): bool
     {
-        return strtolower($roleName)  === strtolower(config('acl.usergroups.default'));
+        return $this->hasRole(config('acl.tenant.default_role'));
     }
 }

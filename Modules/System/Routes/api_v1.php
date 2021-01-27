@@ -26,6 +26,14 @@ Route::group([
             'update'    => 'modules.update',
             'destroy'   => 'modules.destroy'
         ]);
+
+        Route::apiResource('/permissions', 'PermissionController')->names([
+            'index'     => 'permissions.index',
+            'store'     => 'permissions.store',
+            'show'      => 'permissions.show',
+            'update'    => 'permissions.update',
+            'destroy'   => 'permissions.destroy'
+        ]);
     });
 
     Route::apiResource('/roles', 'RoleController')->names([
@@ -37,20 +45,11 @@ Route::group([
     ]);
 
     Route::get('/users/permissions', 'UserController@permission')->name('users.permission');
-
     Route::apiResource('/users', 'UserController')->names([
         'index'     => 'users.index',
         'store'     => 'users.store',
         'show'      => 'users.show',
         'update'    => 'users.update',
         'destroy'   => 'users.destroy'
-    ]);
-
-    Route::apiResource('/permissions', 'PermissionController')->names([
-        'index'     => 'permissions.index',
-        'store'     => 'permissions.store',
-        'show'      => 'permissions.show',
-        'update'    => 'permissions.update',
-        'destroy'   => 'permissions.destroy'
     ]);
 });
