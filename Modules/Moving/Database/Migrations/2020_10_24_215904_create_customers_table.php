@@ -21,8 +21,8 @@ class CreateCustomersTable extends Migration
             $table->unsignedBigInteger('primary_address_id')->nullable();
             $table->unsignedBigInteger('tenant_id');
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('active')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

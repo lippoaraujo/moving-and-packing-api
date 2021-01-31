@@ -6,8 +6,8 @@ return [
         'admin@admin.com',
     ],
 
-    'usergroups' => [
-        'default' => 'master'
+    'tenant' => [
+        'default_role' => 'Master'
     ],
 
 ];

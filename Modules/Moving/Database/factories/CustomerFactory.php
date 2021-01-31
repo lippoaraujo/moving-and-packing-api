@@ -27,7 +27,6 @@ class CustomerFactory extends Factory
             'phone'   => $this->faker->phoneNumber,
             // 'address_id',
             // 'tenant_id',
-            'active' => $this->faker->randomElement([1])
         ];
     }
 

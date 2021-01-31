@@ -192,7 +192,6 @@ class ItemTest extends TestCase
                     'tag',
                     'packing_qty',
                     'packing_id',
-                    'active',
                     'tenant_id',
                     'packing' => [
                         'id',
@@ -209,7 +208,6 @@ class ItemTest extends TestCase
                 'tag',
                 'packing_qty',
                 'packing_id',
-                'active',
                 'tenant_id',
             ];
         } else {
@@ -221,7 +219,6 @@ class ItemTest extends TestCase
                 'tag',
                 'packing_qty',
                 'packing_id',
-                'active',
                 'tenant_id',
                 'packing' => [
                     'id',

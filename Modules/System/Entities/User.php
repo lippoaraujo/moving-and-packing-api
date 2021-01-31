@@ -4,15 +4,22 @@ namespace Modules\System\Entities;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Modules\System\Entities\Traits\UserACL;
 use Torzer\Awesome\Landlord\BelongsToTenants;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, UserACL, BelongsToTenants;
+    use HasFactory,
+        Notifiable,
+        UserACL,
+        BelongsToTenants,
+        HasRoles,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +32,6 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'usergroup_id',
         'tenant_id',
-        'active'
     ];
 
     /**
@@ -78,34 +84,6 @@ class User extends Authenticatable implements JWTSubject
 
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = bcrypt($value);
-    }
-
-    public function usergroup()
-    {
-        return $this->belongsTo(Usergroup::class);
-    }
-
-    public function routes()
-    {
-        return $this->belongsToMany(Route::class, 'action_route_user', 'user_id', 'route_id');
-    }
-
-    public function actions()
-    {
-        return $this->belongsToMany(Action::class, 'action_route_user', 'user_id', 'action_id');
-    }
-
-    public function actionsWhere($routeId)
-    {
-        return $this->belongsToMany(Action::class, 'action_route_user', 'user_id', 'action_id')
-                    ->withPivot('route_id')
-                    ->wherePivot('route_id', $routeId)->get();
-                    // ->as('action_route_user')->get();
-    }
-
-    public function attachRouteAction($routeId, $actionId)
-    {
-        $this->routes()->attach($routeId, ['action_id' => $actionId]);
     }
 
     public function tenant()

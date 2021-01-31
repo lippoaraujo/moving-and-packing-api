@@ -205,31 +205,26 @@ class CustomerTest extends TestCase
                     'email',
                     'phone',
                     'tenant_id',
-                    'active',
                     'primary_address',
                 ]];
         } elseif($address) {
             $json = [
                 'id',
                 'name',
-                'active','id',
                 'name',
                 'email',
                 'phone',
                 'tenant_id',
-                'active',
                 'primary_address'
             ];
         } else {
             $json = [
                 'id',
                 'name',
-                'active','id',
                 'name',
                 'email',
                 'phone',
                 'tenant_id',
-                'active',
             ];
         }
 

@@ -24,7 +24,6 @@ class RoomFactory extends Factory
         return [
            'name'           => $this->faker->randomElement(['Basement', 'Dining Room', 'Kitchen', 'Master Bedroom']),
            'description'    => $this->faker->text(),
-           'active'         => $this->faker->randomElement([1]),
         ];
     }
 }

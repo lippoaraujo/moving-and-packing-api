@@ -238,7 +238,9 @@ class OrderService extends Controller
             }
 
             if ($room->id === $roomData['room_id'] && !empty($roomData['images'])) {
-                $deleteImages ?? $room->images()->delete();
+                if ($deleteImages) {
+                    $room->images()->delete();
+                }
 
                 $images = collect($roomData['images']);
 

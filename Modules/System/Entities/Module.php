@@ -4,10 +4,11 @@ namespace Modules\System\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Module extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,6 @@ class Module extends Model
         'order',
         'color',
         'image',
-        'active',
     ];
 
     /**
@@ -48,10 +48,5 @@ class Module extends Model
     protected static function newFactory()
     {
         return \Modules\System\Database\factories\ModuleFactory::new();
-    }
-
-    public function routes()
-    {
-        return $this->hasMany(Route::class);
     }
 }

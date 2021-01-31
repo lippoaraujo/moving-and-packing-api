@@ -5,10 +5,11 @@ namespace Modules\Moving\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Torzer\Awesome\Landlord\BelongsToTenants;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, BelongsToTenants;
+    use HasFactory, BelongsToTenants, SoftDeletes;
 
     /**
      * The name of the "created at" column.

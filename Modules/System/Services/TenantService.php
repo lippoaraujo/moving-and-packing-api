@@ -7,20 +7,22 @@ use Modules\System\Entities\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Modules\System\Entities\Route;
-use Modules\System\Entities\Action;
 use Modules\System\Entities\Tenant;
-use Modules\System\Entities\Usergroup;
 use Modules\System\Repositories\Contracts\TenantRepositoryInterface;
+use Spatie\Permission\Models\Role;
 use Throwable;
 
 class TenantService extends Controller
 {
     private $repo;
+    private $roleService;
+    private $userService;
 
-    public function __construct(TenantRepositoryInterface $repo)
+    public function __construct(TenantRepositoryInterface $repo, RoleService $roleService, UserService $userService)
     {
-        $this->repo = $repo;
+        $this->repo        = $repo;
+        $this->roleService = $roleService;
+        $this->userService = $userService;
     }
     /**
      * Display a listing of the resource.
@@ -43,15 +45,13 @@ class TenantService extends Controller
 
             $tenant = $this->repo->create($data);
 
-            $defaultUsergroup = $this->createDefaultUsergroup($tenant);
-            $defaultUser      = $this->createDefaultUser($tenant, $defaultUsergroup, $data['password']);
-
-            $this->attachAllPermissions($defaultUser, $defaultUsergroup);
+            $defaultTenantRole = $this->createTenantRole($tenant, 'Master');
+            $defaultTenantUser = $this->createDefaultTenantUser($tenant, $defaultTenantRole, $data['password']);
 
             DB::commit();
 
-            $tenant->default_usergroup = $defaultUsergroup;
-            $tenant->default_user      = $defaultUser;
+            $tenant->default_role = $defaultTenantRole;
+            $tenant->default_user = $defaultTenantUser;
         } catch (Throwable $ex) {
             DB::rollback();
             throw new Exception("error on creating tenant base structure: {$ex->getMessage()}");
@@ -91,79 +91,28 @@ class TenantService extends Controller
         return $this->repo->delete($id);
     }
 
-    private function createDefaultUsergroup(Tenant $tenant)
+    private function createTenantRole(Tenant $tenant, string $roleName)
     {
-        $defaultUsergroupName = $this->getDefaultUsergroupName();
 
-        $defaultUsergroup = $tenant->usergroups()->create([
-            'name' => $defaultUsergroupName,
-            'active' => 1
+        $defaultTenantRole = $this->roleService->store([
+            'name'  => $roleName,
+            'tenant_id' => $tenant->id
         ]);
 
-        return $defaultUsergroup;
+        return $defaultTenantRole;
     }
 
-    private function createDefaultUser(Tenant $tenant, Usergroup $usergroup, $pass)
+    private function createDefaultTenantUser(Tenant $tenant, Role $defaultTenantRole, string $pass)
     {
-        return $usergroup->users()->create([
-            'name'      => $this->getDefaultUserName(),
+        $user = $this->userService->store([
+            'name'      => $tenant->name,
             'email'     => $tenant->email,
             'tenant_id' => $tenant->id,
             'password'  => $pass,
-            'active'    => 1,
         ]);
-    }
 
-    private function getDefaultUsergroupName()
-    {
-        $usergroup = Usergroup::all()->first();
+        $user->assignRole($defaultTenantRole->name);
 
-        if (!empty($usergroup)) {
-            $usergroupName = $usergroup->name;
-        } else {
-            $usergroupName = 'master';
-        }
-
-        return $usergroupName;
-    }
-
-    private function getDefaultUserName()
-    {
-        $user = User::all()->first();
-
-        if (!empty($user)) {
-            $userName = $user->name;
-        } else {
-            $userName = 'admin';
-        }
-
-        return $userName;
-    }
-
-    private function attachAllPermissions(User $user, Usergroup $usergroup)
-    {
-        $routes  = Route::all();
-        $actions = Action::all();
-
-        $this->defaultUserPermissions($user, $routes, $actions);
-        $this->defaultUsergroupPermissions($usergroup, $routes, $actions);
-    }
-
-    private function defaultUserPermissions(User $user, Collection $routes, Collection $actions)
-    {
-        foreach ($routes as $route) {
-            foreach ($actions as $action) {
-                $user->attachRouteAction($route->id, $action->id);
-            }
-        }
-    }
-
-    private function defaultUsergroupPermissions(Usergroup $usergroup, Collection $routes, Collection $actions)
-    {
-        foreach ($routes as $route) {
-            foreach ($actions as $action) {
-                $usergroup->attachRouteAction($route->id, $action->id);
-            }
-        }
+        return $user;
     }
 }

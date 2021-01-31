@@ -19,13 +19,11 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('usergroup_id');
             $table->unsignedBigInteger('tenant_id');
-            $table->foreign('usergroup_id')->references('id')->on('usergroups')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade')->onUpdate('cascade');
-            $table->boolean('active')->default(1);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

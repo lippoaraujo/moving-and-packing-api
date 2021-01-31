@@ -4,10 +4,11 @@ namespace Modules\System\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tenant extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +21,7 @@ class Tenant extends Model
         'name',
         'trading_name',
         'email',
-        'active',
+        'plan_id',
     ];
 
     /**
@@ -42,18 +43,8 @@ class Tenant extends Model
         return \Modules\System\Database\factories\TenantFactory::new();
     }
 
-    public function users()
+    public function plan()
     {
-        return $this->hasManyThrough(User::class, Usergroup::class);
+        return $this->belongsTo(Plan::class);
     }
-
-    public function usergroups()
-    {
-        return $this->hasMany(Usergroup::class);
-    }
-
-    // public function getUsergroupsOfTenant(string $id)
-    // {
-    //     return $this->findOrFail($id)->usergroups()->get();
-    // }
 }
