@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\System\Database\Seeders\Start\{
     ModuleTableSeeder,
     PermissionTableSeeder,
+    PlanHasModulesTableSeeder,
     PlanTableSeeder,
     RoleTableSeeder,
     TenantTableSeeder,
@@ -27,6 +28,7 @@ class SystemDatabaseSeeder extends Seeder
 
         $this->call(ModuleTableSeeder::class);
         $this->call(PlanTableSeeder::class);
+        $this->call(PlanHasModulesTableSeeder::class);
         $this->call(TenantTableSeeder::class);
         $this->call(PermissionTableSeeder::class);
         $this->call(RoleTableSeeder::class);

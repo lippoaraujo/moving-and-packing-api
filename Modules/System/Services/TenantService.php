@@ -7,22 +7,32 @@ use Modules\System\Entities\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Modules\System\Entities\Tenant;
 use Modules\System\Repositories\Contracts\TenantRepositoryInterface;
+use Modules\System\Repositories\Eloquent\EloquentPermissionRepository;
 use Spatie\Permission\Models\Role;
 use Throwable;
+use Torzer\Awesome\Landlord\Facades\Landlord;
 
 class TenantService extends Controller
 {
     private $repo;
     private $roleService;
     private $userService;
+    private $permissionRepo;
 
-    public function __construct(TenantRepositoryInterface $repo, RoleService $roleService, UserService $userService)
+    public function __construct(
+        TenantRepositoryInterface $repo,
+        RoleService $roleService,
+        UserService $userService,
+        EloquentPermissionRepository $permissionRepo
+    )
     {
-        $this->repo        = $repo;
-        $this->roleService = $roleService;
-        $this->userService = $userService;
+        $this->repo           = $repo;
+        $this->roleService    = $roleService;
+        $this->userService    = $userService;
+        $this->permissionRepo = $permissionRepo;
     }
     /**
      * Display a listing of the resource.
@@ -45,12 +55,11 @@ class TenantService extends Controller
 
             $tenant = $this->repo->create($data);
 
-            $defaultTenantRole = $this->createTenantRole($tenant, 'Master');
-            $defaultTenantUser = $this->createDefaultTenantUser($tenant, $defaultTenantRole, $data['password']);
+            $this->createTenantPermissions($tenant);
+            $defaultTenantUser = $this->createDefaultTenantUser($tenant, $data['password']);
 
             DB::commit();
 
-            $tenant->default_role = $defaultTenantRole;
             $tenant->default_user = $defaultTenantUser;
         } catch (Throwable $ex) {
             DB::rollback();
@@ -78,7 +87,10 @@ class TenantService extends Controller
      */
     public function update(array $data, $id)
     {
-        return $this->repo->update($data, $id);
+        $return = $this->repo->update($data, $id);
+        $tenant = $this->show($id);
+        $this->createTenantModulePermissions($tenant);
+        return $return;
     }
 
     /**
@@ -91,18 +103,63 @@ class TenantService extends Controller
         return $this->repo->delete($id);
     }
 
-    private function createTenantRole(Tenant $tenant, string $roleName)
+    private function createTenantPermissions(Tenant $tenant)
     {
-
-        $defaultTenantRole = $this->roleService->store([
-            'name'  => $roleName,
-            'tenant_id' => $tenant->id
-        ]);
-
-        return $defaultTenantRole;
+        Landlord::addTenant($tenant);
+        Landlord::applyTenantScopesToDeferredModels();
+        $this->createPermissions($tenant);
+        $this->createTenantModulePermissions($tenant);
     }
 
-    private function createDefaultTenantUser(Tenant $tenant, Role $defaultTenantRole, string $pass)
+    private function createPermissions(Tenant $tenant)
+    {
+        $allPermissions = config('acl.permissions.can');
+
+        foreach ($allPermissions as $permission) {
+            // app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+            $this->permissionRepo->create([
+                'name' => $permission,
+                'tenant' => $tenant->id
+            ]);
+        }
+    }
+
+    private function createTenantModulePermissions(Tenant $tenant)
+    {
+
+        $permModules = config('acl.permissions.modules');
+        $this->permissionRepo->deleteWhereIn('name', $permModules);
+        app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $tenantLoadPlan = $tenant->load('plan.modules');
+        $tenantModules  = $tenantLoadPlan->plan->modules;
+        $modules        = $tenantModules->pluck('name');
+
+        foreach ($modules as $module) {
+            foreach ($permModules as $permModule) {
+                if (Str::contains(Str::lower($permModule), Str::lower($module))) {
+                    $this->permissionRepo->create([
+                        'name' => $permModule,
+                        'tenant' => $tenant->id
+                    ]);
+                }
+            }
+        }
+    }
+
+    // private function createTenantRole(Tenant $tenant, string $roleName)
+    // {
+
+    //     $defaultTenantRole = $this->roleService->store([
+    //         'name'  => $roleName,
+    //         'tenant_id' => $tenant->id
+    //     ]);
+
+    //     return $defaultTenantRole;
+    // }
+
+    private function createDefaultTenantUser(Tenant $tenant, string $pass)
     {
         $user = $this->userService->store([
             'name'      => $tenant->name,
@@ -110,8 +167,6 @@ class TenantService extends Controller
             'tenant_id' => $tenant->id,
             'password'  => $pass,
         ]);
-
-        $user->assignRole($defaultTenantRole->name);
 
         return $user;
     }

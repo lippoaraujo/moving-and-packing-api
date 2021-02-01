@@ -16,9 +16,9 @@ class TenantRequest extends FormRequest
         $rules = [
             'name' => 'required|string',
             'trading_name' => 'string',
-            'email' => 'required|string',
+            'email' => 'required|string|unique:tenants,email',
             'password' => 'required|confirmed|string',
-            'cnpj' => 'required|int',
+            'cnpj' => 'required|int|unique:tenants,email',
             'password' => 'required|string|confirmed',
             'plan_id' => 'required|int',
         ];

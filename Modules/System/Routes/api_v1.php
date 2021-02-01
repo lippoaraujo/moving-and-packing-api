@@ -4,21 +4,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
+    'prefix' => 'system'
+], function () {
+    Route::post('/tenants', 'TenantController@store')->name('tenants.store');
+});
+
+Route::group([
     'middleware' => ['apiJwt', 'landlord'],
     'prefix' => 'system'
 ], function () {
 
+    Route::put('/tenants/{tenant}', 'TenantController@update')->name('tenants.update');
     Route::group([
         'middleware' => ['super_admin']
     ], function () {
-        Route::apiResource('/tenants', 'TenantController')->names([
+
+        Route::apiResource('/tenants', 'TenantController')->except(['store', 'update'])->names([
             'index'     => 'tenants.index',
-            'store'     => 'tenants.store',
             'show'      => 'tenants.show',
-            'update'    => 'tenants.update',
             'destroy'   => 'tenants.destroy'
         ]);
-
         Route::apiResource('/modules', 'ModuleController')->names([
             'index'     => 'modules.index',
             'store'     => 'modules.store',
@@ -26,15 +31,15 @@ Route::group([
             'update'    => 'modules.update',
             'destroy'   => 'modules.destroy'
         ]);
-
-        Route::apiResource('/permissions', 'PermissionController')->names([
-            'index'     => 'permissions.index',
-            'store'     => 'permissions.store',
-            'show'      => 'permissions.show',
-            'update'    => 'permissions.update',
-            'destroy'   => 'permissions.destroy'
-        ]);
     });
+
+    Route::apiResource('/permissions', 'PermissionController')->names([
+        'index'     => 'permissions.index',
+        'store'     => 'permissions.store',
+        'show'      => 'permissions.show',
+        'update'    => 'permissions.update',
+        'destroy'   => 'permissions.destroy'
+    ]);
 
     Route::apiResource('/roles', 'RoleController')->names([
         'index'     => 'roles.index',

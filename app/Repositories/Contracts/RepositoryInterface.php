@@ -12,4 +12,6 @@ interface RepositoryInterface
     public function create(array $data);
     public function update(array $data, $id);
     public function delete($id);
+    public function deleteWhereIn(string $column, array $data);
+    public function deleteWhereLike(string $column, string $data);
 }

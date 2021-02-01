@@ -8,11 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Moving\Database\Seeders\Start\{
     CustomerTableSeeder,
     ItemTableseeder,
-    ModuleTableSeeder,
     OrderTableSeeder,
     PackingTableSeeder,
-    PermissionTableSeeder,
-    PlanHasModulesTableSeeder,
     RoleTableSeeder,
     RoomTableSeeder,
     UserTableSeeder,
@@ -29,9 +26,6 @@ class MovingDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call(ModuleTableSeeder::class);
-        $this->call(PlanHasModulesTableSeeder::class);
-        $this->call(PermissionTableSeeder::class);
         $this->call(RoleTableSeeder::class);
 
         $env_app = app()->environment();

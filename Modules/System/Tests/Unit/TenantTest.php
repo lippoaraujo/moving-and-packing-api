@@ -190,6 +190,7 @@ class TenantTest extends TestCase
                     'name',
                     'trading_name',
                     'email',
+                    'plan_id',
                 ]];
         } elseif($store) {
                 $json = [
@@ -199,9 +200,6 @@ class TenantTest extends TestCase
                     'name',
                     'trading_name',
                     'email',
-                    'default_role' => [
-                        'name',
-                    ],
                     'default_user' => [
                         'name',
                         'email',
@@ -215,6 +213,7 @@ class TenantTest extends TestCase
                 'name',
                 'trading_name',
                 'email',
+                'plan_id',
             ];
         }
 
