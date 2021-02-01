@@ -16,22 +16,12 @@ class EloquentUserRepository extends BaseEloquentRepository implements UserRepos
 
     public function getUserAuthPermissions(): Collection
     {
-        $user        = auth('api')->user();
-        $tenantPlan  = $user->tenant->plan;
-        $modulesAble = $tenantPlan->modules;
+        $user = auth('api')->user();
 
-        if ($user->isSuperAdmin()) {
+        if ($user->isSuperAdmin() || ($user->isTenant() && $user->isMasterTenant())) {
             $permissions['permissions'] = true;
-        } elseif ($user->isTenant() && $user->isMasterTenantRole()) {
-            $permissions['permissions'] = [
-                'can'           => true,
-                'plan_modules'  => $modulesAble
-            ];
         } else {
-            $permissions['permissions'] = [
-                'can'           => $user->isSuperAdmin() ? true : $user->getAllPermissions(),
-                'plan_modules'  => $user->isSuperAdmin() ? true : $modulesAble
-            ];
+            $permissions['permissions'] = $user->getAllPermissions();
         }
 
         return collect($permissions);

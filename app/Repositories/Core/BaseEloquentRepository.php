@@ -55,6 +55,21 @@ class BaseEloquentRepository implements RepositoryInterface
         return $this->entity->findOrFail($id)->delete();
     }
 
+    public function deleteByName($name)
+    {
+        return $this->entity->where('name', $name)->delete();
+    }
+
+    public function deleteWhereIn(string $column, array $data)
+    {
+        return $this->entity->whereIn($column, $data)->delete();
+    }
+
+    public function deleteWhereLike(string $column, string $data)
+    {
+        return $this->entity->where($column, 'like', "{$data}%")->delete();
+    }
+
     public function relationships(...$relationships)
     {
         $this->entity = $this->entity->with($relationships);

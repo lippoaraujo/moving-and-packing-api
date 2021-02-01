@@ -18,7 +18,7 @@
     <exclude-pattern>*/Resources/*</exclude-pattern>
     <exclude-pattern>*/console/*</exclude-pattern>
 
-    <rule ref="MySource.PHP.EvalObjectFactory"/>
+    <!-- <rule ref="MySource.PHP.EvalObjectFactory"/>
     <rule ref="MySource.PHP.GetRequestData"/>
 
     <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
@@ -63,8 +63,18 @@
         </properties>
     </rule>
     <rule ref="Generic.VersionControl.SubversionProperties"/>
-    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
-    <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
+    <rule ref="Generic.WhiteSpace.DisallowTabIndent"/> -->
+    <!-- <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
+    <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine">
+        <severity>0</severity>
+    </rule> -->
+    <!-- <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.CloseBracketLine">
+        <severity>0</severity>
+    </rule> --> -->
 
-    <rule ref="PSR12"/>
+    <rule ref="PSR12">
+        <!-- to disable a single error -->
+        <!-- <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.CloseBracketLine"/> -->
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.NewlineBeforeOpenBrace"/>
+    </rule>
 </ruleset>
