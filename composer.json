@@ -18,7 +18,7 @@
         "nwidart/laravel-modules": "8.0.0",
         "spatie/laravel-permission": "^3.18",
         "torzer/awesome-landlord": "^3.4",
-        "tymon/jwt-auth": "1.0.1"
+        "tymon/jwt-auth": "1.0.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",

@@ -49,6 +49,6 @@ trait ApiResponser
             $json = $json->merge($allPermissions);
         }
 
-        return response()->json($json, Response::HTTP_OK);
+        return response()->json($json, Response::HTTP_OK, ['Authorization' => $token]);
     }
 }

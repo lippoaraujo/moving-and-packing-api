@@ -6,6 +6,9 @@ use App\Traits\ApiResponser;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
@@ -26,16 +29,28 @@ class ApiProtectedRoute extends BaseMiddleware
     {
         try {
             $user = JWTAuth::parseToken()->authenticate();
-        } catch (\Exception $e) {
-            if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
+        } catch (\Throwable $e) {
+            if ($e instanceof TokenInvalidException) {
                 $message = "Token is Invalid";
                 return $this->errorResponse($message, self::HTTP_CODE);
-            } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
+            } elseif ($e instanceof TokenExpiredException) {
+                if ($request->route()->named('auth.refresh')) {
+                    try {
+                        $newToken = JWTAuth::refresh(JWTAuth::getToken());
+
+                        if (!empty($newToken)) {
+                            return $this->respondWithToken($newToken);
+                        }
+                    } catch (JWTException $e) {
+                        $message = 'Token is not refreshable';
+                        return $this->errorResponse($message, self::HTTP_CODE);
+                    }
+                }
+
                 $message = "Token is Expired";
                 return $this->errorResponse($message, self::HTTP_CODE);
             } else {
-                $message = "Authorization Token not found";
-                return $this->errorResponse($message, self::HTTP_CODE);
+                return $this->errorResponse($e->getMessage(), self::HTTP_CODE);
             }
         }
 
