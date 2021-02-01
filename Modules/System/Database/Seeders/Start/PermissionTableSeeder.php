@@ -3,7 +3,10 @@
 namespace Modules\System\Database\Seeders\Start;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Http\Response;
+use Modules\System\Database\Seeders\Exceptions\SeedTenantNotFound;
 use Modules\System\Entities\Permission;
+use Modules\System\Entities\Tenant;
 
 class PermissionTableSeeder extends Seeder
 {
@@ -14,22 +17,29 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [
-            'role-list',
-            'role-create',
-            'role-show',
-            'role-edit',
-            'role-delete',
+        $tenant = Tenant::first();
 
-            'user-list',
-            'user-create',
-            'user-show',
-            'user-edit',
-            'user-delete',
-        ];
+        if(!empty($tenant)) {
+            foreach (config('acl.permissions.can') as $permission) {
+                Permission::create([
+                    'name' => $permission,
+                    'tenant_id' => $tenant->id
+                ]);
+            }
 
-        foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission]);
+            $env_app = app()->environment();
+            if ($env_app === 'local' || $env_app === 'testing') {
+                foreach (config('acl.permissions.modules') as $permission) {
+                    Permission::create([
+                        'name' => $permission,
+                        'tenant_id' => $tenant->id
+                    ]);
+                }
+            }
+        } else {
+            $message = 'ERROR: Tenant not found!';
+            $this->command->error($message);
+            throw new SeedTenantNotFound($message, Response::HTTP_NOT_FOUND);
         }
     }
 }

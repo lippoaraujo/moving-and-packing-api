@@ -20,4 +20,9 @@ Trait UserACL
     {
         return $this->hasRole(config('acl.tenant.default_role'));
     }
+
+    public function isMasterTenant(): bool
+    {
+        return $this->email === $this->tenant->email;
+    }
 }

@@ -23,11 +23,11 @@ class TenantController extends Controller
 
     public function __construct(TenantService $service)
     {
-        $this->middleware('permission:tenant-list', ['only' => ['index']]);
-        $this->middleware('permission:tenant-create', ['only' => ['store']]);
-        $this->middleware('permission:tenant-show', ['only' => ['show']]);
-        $this->middleware('permission:tenant-edit', ['only' => ['update']]);
-        $this->middleware('permission:tenant-delete', ['only' => ['destroy']]);
+        // $this->middleware('permission:tenant-list', ['only' => ['index']]);
+        // $this->middleware('permission:tenant-create', ['only' => ['store']]);
+        // $this->middleware('permission:tenant-show', ['only' => ['show']]);
+        // $this->middleware('permission:tenant-edit', ['only' => ['update']]);
+        // $this->middleware('permission:tenant-delete', ['only' => ['destroy']]);
 
         $this->service = $service;
     }
@@ -49,6 +49,7 @@ class TenantController extends Controller
      */
     public function store(TenantRequest $request)
     {
+
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }

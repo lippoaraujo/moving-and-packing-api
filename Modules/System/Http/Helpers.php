@@ -11,3 +11,17 @@ if (! function_exists('pluckExplodedUnique')) {
             })->unique()->values();
     }
 }
+
+if (! function_exists('explodeGetFist')) {
+    function explodeGetFist(string $delimiter, string $string)
+    {
+        return array_shift(explode($delimiter, $string));
+    }
+}
+
+if (! function_exists('explodeGetLast')) {
+    function explodeGetLast(string $delimiter, string $string)
+    {
+        return array_pop(explode($delimiter, $string));
+    }
+}

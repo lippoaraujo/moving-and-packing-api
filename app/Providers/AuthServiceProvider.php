@@ -32,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::before(function(User $user) {
 
-            if($user->isSuperAdmin() || ($user->isTenant() && $user->isMasterTenantRole())) {
+            if($user->isSuperAdmin() || ($user->isTenant() && $user->isMasterTenant())) {
                 return Response::allow();
             }
 
