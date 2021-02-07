@@ -51,6 +51,8 @@ class RoleTableSeeder extends Seeder
                     'customer-show',
                     'customer-edit',
                     'customer-delete',
+
+                    'moving-module'
                 ];
 
                 $role->givePermissionTo($permissions);
