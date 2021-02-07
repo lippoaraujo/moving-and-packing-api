@@ -23,6 +23,8 @@ class SellerController extends Controller
 
     public function __construct(SellerService $service)
     {
+        $this->middleware('permission:seller-list', ['only' => ['index']]);
+
         $this->service = $service;
     }
 

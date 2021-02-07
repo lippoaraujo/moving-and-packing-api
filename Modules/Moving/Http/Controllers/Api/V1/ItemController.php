@@ -24,6 +24,12 @@ class ItemController extends Controller
 
     public function __construct(ItemService $service)
     {
+        $this->middleware('permission:item-list', ['only' => ['index']]);
+        $this->middleware('permission:item-create', ['only' => ['store']]);
+        $this->middleware('permission:item-show', ['only' => ['show']]);
+        $this->middleware('permission:item-edit', ['only' => ['update']]);
+        $this->middleware('permission:item-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
     }
 
