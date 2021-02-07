@@ -61,7 +61,7 @@ class OrderController extends Controller
         $request->boolean('get_data') ? $getData = true : $getData = false;
 
         $data = $this->service->show($id, $getData);
-        return $this->successResponse($data);
+        return $this->successResponse($data->toArray());
     }
 
     /**
