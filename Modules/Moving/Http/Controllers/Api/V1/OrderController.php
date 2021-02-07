@@ -23,6 +23,12 @@ class OrderController extends Controller
 
     public function __construct(OrderService $service)
     {
+        $this->middleware('permission:order-list', ['only' => ['index']]);
+        $this->middleware('permission:order-create', ['only' => ['store']]);
+        $this->middleware('permission:order-show', ['only' => ['show']]);
+        $this->middleware('permission:order-edit', ['only' => ['update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
     }
 

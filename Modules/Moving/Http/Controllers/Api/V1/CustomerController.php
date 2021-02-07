@@ -23,6 +23,12 @@ class CustomerController extends Controller
 
     public function __construct(CustomerService $service)
     {
+        $this->middleware('permission:customer-list', ['only' => ['index']]);
+        $this->middleware('permission:customer-create', ['only' => ['store']]);
+        $this->middleware('permission:customer-show', ['only' => ['show']]);
+        $this->middleware('permission:customer-edit', ['only' => ['update']]);
+        $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
     }
 

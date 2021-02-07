@@ -23,6 +23,12 @@ class PackingController extends Controller
 
     public function __construct(PackingService $service)
     {
+        $this->middleware('permission:packing-list', ['only' => ['index']]);
+        $this->middleware('permission:packing-create', ['only' => ['store']]);
+        $this->middleware('permission:packing-show', ['only' => ['show']]);
+        $this->middleware('permission:packing-edit', ['only' => ['update']]);
+        $this->middleware('permission:packing-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
     }
 
