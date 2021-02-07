@@ -36,8 +36,7 @@ class ApiProtectedRoute extends BaseMiddleware
             } elseif ($e instanceof TokenExpiredException) {
                 if ($request->route()->named('auth.refresh')) {
                     try {
-                        $newToken = JWTAuth::refresh(JWTAuth::getToken());
-
+                        $newToken = JWTAuth::refresh($request->bearerToken());
                         if (!empty($newToken)) {
                             return $this->respondWithToken($newToken);
                         }
