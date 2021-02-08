@@ -34,6 +34,7 @@ class OrderRequest extends FormRequest
 
             'rooms.*.items'             => 'required|array',
             'rooms.*.items.*.item_id'   => 'required|int',
+            'rooms.*.items.*.quantity'  => 'required|int',
             'rooms.*.items.*.obs'       => 'string|nullable',
 
             'rooms.*.images'            => 'array|nullable',
@@ -62,6 +63,7 @@ class OrderRequest extends FormRequest
 
                 'rooms.*.items'             => 'array',
                 'rooms.*.items.*.item_id'   => 'int',
+                'rooms.*.items.*.quantity'  => 'int',
                 'rooms.*.items.*.obs'       => 'string|nullable',
 
                 'rooms.*.images'            => 'array|nullable',

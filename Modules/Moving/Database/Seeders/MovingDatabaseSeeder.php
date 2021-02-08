@@ -26,15 +26,15 @@ class MovingDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call(RoleTableSeeder::class);
+        // $this->call(RoleTableSeeder::class);
 
         $env_app = app()->environment();
         if ($env_app === 'local' || $env_app === 'testing') {
-            $this->call(UserTableSeeder::class);
-            $this->call(CustomerTableSeeder::class);
-            $this->call(RoomTableSeeder::class);
-            $this->call(PackingTableSeeder::class);
-            $this->call(ItemTableseeder::class);
+            // $this->call(UserTableSeeder::class);
+            // $this->call(CustomerTableSeeder::class);
+            // $this->call(RoomTableSeeder::class);
+            // $this->call(PackingTableSeeder::class);
+            // $this->call(ItemTableseeder::class);
             $this->call(OrderTableSeeder::class);
         }
     }

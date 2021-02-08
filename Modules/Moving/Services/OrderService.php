@@ -169,7 +169,7 @@ class OrderService extends Controller
      *
      * @return array
      */
-    private function getRoomsIds(Collection $rooms)
+    public function getRoomsIds(Collection $rooms)
     {
         $rooms_ids = [];
 
@@ -192,7 +192,8 @@ class OrderService extends Controller
         $items_ids = [];
 
         foreach ($items as $item) {
-            $items_ids[$item['item_id']] = ['obs' => $item['obs'] ?? null];
+            //item ID and pivot datas... [1 => ['obs' => 'test', 'quantity' => 1]]
+            $items_ids[$item['item_id']] = ['obs' => $item['obs'] ?? null, 'quantity' => $item['quantity']];
         }
 
         return $items_ids;
@@ -225,7 +226,7 @@ class OrderService extends Controller
      *
      * @return void
      */
-    private function syncOrderItems(Room $room, Collection $rooms, bool $deleteImages = false)
+    public function syncOrderItems(Room $room, Collection $rooms, bool $deleteImages = false)
     {
         foreach ($rooms as $roomData) {
             if ($room->id === $roomData['room_id'] && !empty($roomData['items'])) {
