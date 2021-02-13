@@ -4,6 +4,7 @@ on:
     branches:
       - develop
       - main
+      - staging
 jobs:
   continuous-integration:
     name: Laravel (PHP ${{ matrix.php-versions }})
@@ -92,8 +93,8 @@ jobs:
         # env:
         #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
-      # - name: Run Database Modules Seeders
-      #   run: php artisan module:seed
+      - name: Run Database Modules Seeders
+        run: php artisan module:seed
       # env:
       #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       - name: Run Test with phpunit

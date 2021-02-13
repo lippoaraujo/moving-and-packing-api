@@ -33,5 +33,22 @@ class ModuleTableSeeder extends Seeder
         } else {
             $this->command->warn("INFO: Module alredy exist: {$module->name}");
         }
+
+        $module = Module::where('name', 'moving')->first();
+
+        if (empty($module)) {
+
+            $module = Module::factory()->create([
+                'name' => 'moving',
+                'color' => '#45b877',
+                'image' => 'mdi-clipboard-edit-outline',
+                'description' => 'moving, packing, orders and customers management...',
+            ]);
+
+            $this->command->info("INFO: Module was created: {$module->name}");
+
+        } else {
+            $this->command->warn("INFO: Module alredy exist: {$module->name}");
+        }
     }
 }

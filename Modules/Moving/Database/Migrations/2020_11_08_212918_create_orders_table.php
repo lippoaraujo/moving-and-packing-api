@@ -29,6 +29,7 @@ class CreateOrdersTable extends Migration
 
             $table->date('expected_date')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

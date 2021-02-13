@@ -20,8 +20,11 @@ class CreateTenantsTable extends Migration
             $table->string('name');
             $table->string('trading_name');
             $table->string('email')->unique();
-            $table->boolean('active')->default(1);
+            $table->unsignedBigInteger('plan_id');
+
+            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

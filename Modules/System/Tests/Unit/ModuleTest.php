@@ -185,7 +185,6 @@ class ModuleTest extends TestCase
                     'order',
                     'color',
                     'image',
-                    'active',
                 ]];
         } else {
             $json = [
@@ -196,7 +195,6 @@ class ModuleTest extends TestCase
                 'order',
                 'color',
                 'image',
-                'active',
             ];
         }
 

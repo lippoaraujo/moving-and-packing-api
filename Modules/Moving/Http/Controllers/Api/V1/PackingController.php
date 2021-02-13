@@ -23,8 +23,13 @@ class PackingController extends Controller
 
     public function __construct(PackingService $service)
     {
+        $this->middleware('permission:packing-list', ['only' => ['index']]);
+        $this->middleware('permission:packing-create', ['only' => ['store']]);
+        $this->middleware('permission:packing-show', ['only' => ['show']]);
+        $this->middleware('permission:packing-edit', ['only' => ['update']]);
+        $this->middleware('permission:packing-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
-        $this->middleware('can:packings');
     }
 
     /**
@@ -33,7 +38,6 @@ class PackingController extends Controller
      */
     public function index()
     {
-        $this->authorize('packings', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -45,7 +49,6 @@ class PackingController extends Controller
      */
     public function store(PackingRequest $request)
     {
-        $this->authorize('packings', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -57,7 +60,6 @@ class PackingController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('packings', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -70,7 +72,6 @@ class PackingController extends Controller
      */
     public function update(PackingRequest $request, $id)
     {
-        $this->authorize('packings', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -82,7 +83,6 @@ class PackingController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('packings', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

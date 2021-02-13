@@ -24,8 +24,13 @@ class ItemController extends Controller
 
     public function __construct(ItemService $service)
     {
+        $this->middleware('permission:item-list', ['only' => ['index']]);
+        $this->middleware('permission:item-create', ['only' => ['store']]);
+        $this->middleware('permission:item-show', ['only' => ['show']]);
+        $this->middleware('permission:item-edit', ['only' => ['update']]);
+        $this->middleware('permission:item-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
-        $this->middleware('can:items');
     }
 
     /**
@@ -34,7 +39,6 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $this->authorize('items', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -46,7 +50,6 @@ class ItemController extends Controller
      */
     public function store(ItemRequest $request)
     {
-        $this->authorize('items', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -58,7 +61,6 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('items', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -71,7 +73,6 @@ class ItemController extends Controller
      */
     public function update(ItemRequest $request, $id)
     {
-        $this->authorize('items', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }

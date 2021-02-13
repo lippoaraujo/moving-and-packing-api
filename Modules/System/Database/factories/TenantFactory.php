@@ -5,6 +5,7 @@ namespace Modules\System\Database\factories;
 use Illuminate\Support\Str;
 use Modules\System\Entities\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Modules\System\Entities\Plan;
 
 class TenantFactory extends Factory
 {
@@ -29,7 +30,7 @@ class TenantFactory extends Factory
             'name'          => $name,
             'trading_name'  => $name,
             'email'         => $this->faker->email,
-            'active'        => $this->faker->randomElement([1]),
+            // 'active'        => $this->faker->randomElement([1]),
         ];
     }
 
@@ -40,10 +41,12 @@ class TenantFactory extends Factory
      */
     public function passConfirmed()
     {
+        $plan = Plan::first();
         $pass = $this->faker->password();
-        return $this->state(function (array $attributes) use ($pass) {
+        return $this->state(function (array $attributes) use ($pass, $plan) {
             return [
                 'password_confirmation' => $pass,
+                'plan_id' => $plan->id,
             ];
         });
     }

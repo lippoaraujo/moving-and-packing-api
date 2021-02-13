@@ -23,8 +23,13 @@ class OrderController extends Controller
 
     public function __construct(OrderService $service)
     {
+        $this->middleware('permission:order-list', ['only' => ['index']]);
+        $this->middleware('permission:order-create', ['only' => ['store']]);
+        $this->middleware('permission:order-show', ['only' => ['show']]);
+        $this->middleware('permission:order-edit', ['only' => ['update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
-        $this->middleware('can:orders');
     }
 
     /**
@@ -34,8 +39,6 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $this->authorize('orders', 'index');
-
         $request->boolean('get_data') ? $getData = true : $getData = false;
 
         $data = $this->service->index($getData);
@@ -49,7 +52,6 @@ class OrderController extends Controller
      */
     public function store(OrderRequest $request)
     {
-        $this->authorize('orders', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -62,12 +64,10 @@ class OrderController extends Controller
      */
     public function show($id, Request $request)
     {
-        $this->authorize('orders', 'show');
-
         $request->boolean('get_data') ? $getData = true : $getData = false;
 
         $data = $this->service->show($id, $getData);
-        return $this->successResponse($data);
+        return $this->successResponse($data->toArray());
     }
 
     /**
@@ -78,7 +78,6 @@ class OrderController extends Controller
      */
     public function update(OrderRequest $request, $id)
     {
-        $this->authorize('orders', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -90,7 +89,6 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('orders', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

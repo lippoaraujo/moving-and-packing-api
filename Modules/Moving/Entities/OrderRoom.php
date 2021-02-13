@@ -41,7 +41,7 @@ class OrderRoom extends Model
     {
         return $this->belongsToMany(Item::class, 'item_order_room', 'order_room_id', 'item_id')
                     ->withTimestamps()
-                    ->withPivot(['obs']);
+                    ->withPivot(['obs', 'quantity']);
     }
 
     public function room()

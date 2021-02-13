@@ -23,8 +23,13 @@ class CustomerController extends Controller
 
     public function __construct(CustomerService $service)
     {
+        $this->middleware('permission:customer-list', ['only' => ['index']]);
+        $this->middleware('permission:customer-create', ['only' => ['store']]);
+        $this->middleware('permission:customer-show', ['only' => ['show']]);
+        $this->middleware('permission:customer-edit', ['only' => ['update']]);
+        $this->middleware('permission:customer-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
-        $this->middleware('can:customers');
     }
 
     /**
@@ -33,7 +38,6 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        $this->authorize('customers', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }
@@ -45,7 +49,6 @@ class CustomerController extends Controller
      */
     public function store(CustomerRequest $request)
     {
-        $this->authorize('customers', 'store');
         $data = $this->service->store($request->all());
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
@@ -57,7 +60,6 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        $this->authorize('customers', 'show');
         $data = $this->service->show($id);
         return $this->successResponse($data);
     }
@@ -70,7 +72,6 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, $id)
     {
-        $this->authorize('customers', 'update');
         $data = $this->service->update($request->all(), $id);
         return $this->successResponse($data);
     }
@@ -82,7 +83,6 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('customers', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }

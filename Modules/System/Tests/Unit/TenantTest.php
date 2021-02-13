@@ -3,8 +3,6 @@
 namespace Modules\System\Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Modules\System\Entities\Tenant;
 
@@ -192,7 +190,7 @@ class TenantTest extends TestCase
                     'name',
                     'trading_name',
                     'email',
-                    'active',
+                    'plan_id',
                 ]];
         } elseif($store) {
                 $json = [
@@ -202,17 +200,9 @@ class TenantTest extends TestCase
                     'name',
                     'trading_name',
                     'email',
-                    'active',
-                    'default_usergroup' => [
-                        'name',
-                        'tenant_id',
-                        'active'
-                    ],
                     'default_user' => [
                         'name',
                         'email',
-                        'usergroup_id',
-                        'active'
                     ]
                 ];
         } else {
@@ -223,7 +213,7 @@ class TenantTest extends TestCase
                 'name',
                 'trading_name',
                 'email',
-                'active',
+                'plan_id',
             ];
         }
 

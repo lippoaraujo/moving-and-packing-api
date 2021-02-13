@@ -4,11 +4,12 @@ namespace Modules\Moving\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Torzer\Awesome\Landlord\BelongsToTenants;
 
 class Item extends Model
 {
-    use HasFactory, BelongsToTenants;
+    use HasFactory, BelongsToTenants, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,6 @@ class Item extends Model
         'packing_qty',
         'packing_id',
         'tag',
-        'active',
         'tenant_id'
     ];
 

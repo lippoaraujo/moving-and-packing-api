@@ -23,8 +23,9 @@ class SellerController extends Controller
 
     public function __construct(SellerService $service)
     {
+        $this->middleware('permission:seller-list', ['only' => ['index']]);
+
         $this->service = $service;
-        $this->middleware('can:sellers');
     }
 
     /**
@@ -33,7 +34,6 @@ class SellerController extends Controller
      */
     public function index()
     {
-        $this->authorize('sellers', 'index');
         $data = $this->service->index();
         return $this->successResponse($data);
     }

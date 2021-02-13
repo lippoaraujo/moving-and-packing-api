@@ -16,11 +16,11 @@ class TenantRequest extends FormRequest
         $rules = [
             'name' => 'required|string',
             'trading_name' => 'string',
-            'email' => 'required|string',
+            'email' => 'required|string|unique:tenants,email',
             'password' => 'required|confirmed|string',
-            'cnpj' => 'required|int',
-            'active' => 'int',
+            'cnpj' => 'required|int|unique:tenants,email',
             'password' => 'required|string|confirmed',
+            'plan_id' => 'required|int',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
@@ -29,7 +29,7 @@ class TenantRequest extends FormRequest
                 'trading_name' => 'string',
                 'email' => 'string',
                 'cnpj' => 'int',
-                'active' => 'int',
+                'plan_id' => 'int',
             ];
         }
 

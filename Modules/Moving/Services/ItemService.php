@@ -33,7 +33,6 @@ class ItemService extends Controller
     public function store(array $data)
     {
         return $this->repo->create($data);
-        ;
     }
 
     /**
