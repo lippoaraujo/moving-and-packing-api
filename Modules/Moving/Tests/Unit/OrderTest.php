@@ -248,7 +248,8 @@ class OrderTest extends TestCase
                                     'pivot' => [
                                         'order_room_id',
                                         'item_id',
-                                        'obs'
+                                        'obs',
+                                        'quantity'
                                     ]
                                 ]
                             ],
@@ -329,7 +330,8 @@ class OrderTest extends TestCase
                                     'pivot' => [
                                         'order_room_id',
                                         'item_id',
-                                        'obs'
+                                        'obs',
+                                        'quantity'
                                     ]
                                 ]
                             ],

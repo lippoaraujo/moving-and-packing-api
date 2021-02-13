@@ -37,12 +37,22 @@ class RoleTableSeeder extends Seeder
                     'item-list',
                     'room-list',
                     'seller-list',
-                    'customer-list',
+
                     'packing-list',
+
                     'order-list',
                     'order-create',
+                    'order-show',
                     'order-edit',
                     'order-delete',
+
+                    'customer-list',
+                    'customer-create',
+                    'customer-show',
+                    'customer-edit',
+                    'customer-delete',
+
+                    'moving-module'
                 ];
 
                 $role->givePermissionTo($permissions);

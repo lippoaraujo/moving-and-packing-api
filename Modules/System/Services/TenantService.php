@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Modules\System\Entities\Tenant;
 use Modules\System\Repositories\Contracts\TenantRepositoryInterface;
 use Modules\System\Repositories\Eloquent\EloquentPermissionRepository;
+use Modules\System\Tests\Unit\TenantTest;
 use Spatie\Permission\Models\Role;
 use Throwable;
 use Torzer\Awesome\Landlord\Facades\Landlord;
@@ -56,6 +57,7 @@ class TenantService extends Controller
             $tenant = $this->repo->create($data);
 
             $this->createTenantPermissions($tenant);
+            $this->createDefaultSellerGroup($tenant);
             $defaultTenantUser = $this->createDefaultTenantUser($tenant, $data['password']);
 
             DB::commit();
@@ -101,6 +103,38 @@ class TenantService extends Controller
     public function destroy($id)
     {
         return $this->repo->delete($id);
+    }
+
+    private function createDefaultSellerGroup(Tenant $tenant)
+    {
+        $role = $this->roleService->store([
+            'name' => 'Seller',
+            'tenant_id' => $tenant->id
+        ]);
+
+        $permissions = [
+            'item-list',
+            'room-list',
+            'seller-list',
+
+            'packing-list',
+
+            'order-list',
+            'order-create',
+            'order-show',
+            'order-edit',
+            'order-delete',
+
+            'customer-list',
+            'customer-create',
+            'customer-show',
+            'customer-edit',
+            'customer-delete',
+
+            'moving-module'
+        ];
+
+        $role->givePermissionTo($permissions);
     }
 
     private function createTenantPermissions(Tenant $tenant)

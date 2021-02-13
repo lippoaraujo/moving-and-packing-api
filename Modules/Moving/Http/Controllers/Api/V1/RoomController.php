@@ -23,6 +23,12 @@ class RoomController extends Controller
 
     public function __construct(RoomService $service)
     {
+        $this->middleware('permission:room-list', ['only' => ['index']]);
+        $this->middleware('permission:room-create', ['only' => ['store']]);
+        $this->middleware('permission:room-show', ['only' => ['show']]);
+        $this->middleware('permission:room-edit', ['only' => ['update']]);
+        $this->middleware('permission:room-delete', ['only' => ['destroy']]);
+
         $this->service = $service;
     }
 

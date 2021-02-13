@@ -58,15 +58,18 @@ class OrderFactory extends Factory
                         'items'     =>  [
                             [
                                 'item_id'   => 2,
-                                'obs'       => 'lorem ipsum dolor'
+                                'obs'       => 'lorem ipsum dolor',
+                                'quantity'  => 1
                             ],
                             [
                                 'item_id'   => 7,
-                                'obs'       => 'lorem ipsum dolor'
+                                'obs'       => 'lorem ipsum dolor',
+                                'quantity'  => 2
                             ],
                             [
                                 'item_id'   => 10,
-                                'obs'       => 'lorem ipsum dolor'
+                                'obs'       => 'lorem ipsum dolor',
+                                'quantity'  => 1
                             ],
                         ],
                         'images'    => [
@@ -81,7 +84,8 @@ class OrderFactory extends Factory
                         'items'     =>  [
                             [
                                 'item_id'   => 3,
-                                'obs'       => 'lorem ipsum dolor'
+                                'obs'       => 'lorem ipsum dolor',
+                                'quantity'  => 1
                             ]
                         ],
                         'images'    => [
@@ -96,7 +100,8 @@ class OrderFactory extends Factory
                         'items'     =>  [
                             [
                                 'item_id'   => 5,
-                                'obs'       => 'lorem ipsum dolor'
+                                'obs'       => 'lorem ipsum dolor',
+                                'quantity'  => 1
                             ]
                         ],
                         'images'    => [
@@ -111,7 +116,8 @@ class OrderFactory extends Factory
                         'items'     =>  [
                             [
                                 'item_id'   => 8,
-                                'obs'       => 'lorem ipsum dolor'
+                                'obs'       => 'lorem ipsum dolor',
+                                'quantity'  => 5
                             ]
                         ],
                         'images'    => [

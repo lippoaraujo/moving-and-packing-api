@@ -23,6 +23,8 @@ class CreateItemOrderRoomTable extends Migration
 
             $table->text('obs')->nullable();
 
+            $table->unsignedInteger('quantity');
+
             $table->timestamps();
         });
     }
