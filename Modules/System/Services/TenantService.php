@@ -154,12 +154,12 @@ class TenantService extends Controller
 
             $this->permissionRepo->create([
                 'name' => $permission,
-                'tenant' => $tenant->id
+                'tenant_id' => $tenant->id
             ]);
         }
     }
 
-    private function createTenantModulePermissions(Tenant $tenant)
+    public function createTenantModulePermissions(Tenant $tenant)
     {
 
         $permModules = config('acl.permissions.modules');
@@ -175,7 +175,7 @@ class TenantService extends Controller
                 if (Str::contains(Str::lower($permModule), Str::lower($module))) {
                     $this->permissionRepo->create([
                         'name' => $permModule,
-                        'tenant' => $tenant->id
+                        'tenant_id' => $tenant->id
                     ]);
                 }
             }

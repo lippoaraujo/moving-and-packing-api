@@ -7,9 +7,17 @@ use Illuminate\Http\Response;
 use Modules\System\Database\Seeders\Exceptions\SeedTenantNotFound;
 use Modules\System\Entities\Permission;
 use Modules\System\Entities\Tenant;
+use Modules\System\Services\TenantService;
 
 class PermissionTableSeeder extends Seeder
 {
+    private $tenantService;
+
+    public function __construct(TenantService $tenantService)
+    {
+        $this->tenantService = $tenantService;
+    }
+
     /**
      * Run the database seeds.
      *
@@ -35,6 +43,8 @@ class PermissionTableSeeder extends Seeder
                         'tenant_id' => $tenant->id
                     ]);
                 }
+            } elseif($env_app === 'production') {
+                $this->tenantService->createTenantModulePermissions($tenant);
             }
         } else {
             $message = 'ERROR: Tenant not found!';
