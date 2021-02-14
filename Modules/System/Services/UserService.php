@@ -21,7 +21,7 @@ class UserService extends Controller
      */
     public function index()
     {
-        return $this->repo->getAll();
+        return $this->repo->relationships('roles')->getAll();
     }
 
     /**
@@ -48,7 +48,7 @@ class UserService extends Controller
      */
     public function show(string $id)
     {
-        return $this->repo->findById($id);
+        return $this->repo->relationships('roles')->findById($id);
     }
 
     /**
