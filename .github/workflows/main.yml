@@ -26,14 +26,16 @@ jobs:
     #   options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     services:
       postgres:
-        image: postgres:10.8
+        image: postgres:12
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
           POSTGRES_DB: test
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     strategy:
       fail-fast: false
@@ -76,10 +78,10 @@ jobs:
       - name: Copy ENV Laravel Configuration for CI
         run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
 
-      - name: Create sqllite file
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
+      # - name: Create sqllite file
+      #   run: |
+      #     mkdir -p database
+      #     touch database/database.sqlite
 
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
