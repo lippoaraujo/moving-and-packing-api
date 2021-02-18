@@ -36,7 +36,7 @@ class OrderService extends Controller
                 'customer',
                 'user',
                 'orderRooms.room',
-                'orderRooms.items',
+                'orderRooms.items.packing',
                 'orderRooms.images'
             )->getAll();
         } else {
@@ -99,7 +99,7 @@ class OrderService extends Controller
                 'customer',
                 'user',
                 'orderRooms.room',
-                'orderRooms.items',
+                'orderRooms.items.packing',
                 'orderRooms.images'
             )->findById($id);
         } else {

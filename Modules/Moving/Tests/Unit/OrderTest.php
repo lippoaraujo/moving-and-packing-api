@@ -250,6 +250,11 @@ class OrderTest extends TestCase
                                         'item_id',
                                         'obs',
                                         'quantity'
+                                    ],
+                                    'packing' => [
+                                        'id',
+                                        'name',
+                                        'unity'
                                     ]
                                 ]
                             ],
@@ -332,6 +337,11 @@ class OrderTest extends TestCase
                                         'item_id',
                                         'obs',
                                         'quantity'
+                                    ],
+                                    'packing' => [
+                                        'id',
+                                        'name',
+                                        'unity'
                                     ]
                                 ]
                             ],
