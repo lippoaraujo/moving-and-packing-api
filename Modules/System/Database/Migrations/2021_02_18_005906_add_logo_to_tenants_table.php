@@ -14,7 +14,7 @@ class AddLogoToTenantsTable extends Migration
     public function up()
     {
         Schema::table('tenants', function (Blueprint $table) {
-			$table->mediumText('logo')->after('email');
+			$table->mediumText('logo')->nullable()->after('email');
 
         });
     }
