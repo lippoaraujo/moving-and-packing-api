@@ -114,7 +114,7 @@ jobs:
       # env:
       #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       - name: Run Migration Base Modules
-        run: php artisan module:migrate --database=sqlite
+        run: php artisan module:migrate
         # env:
         #   DB_PORT: ${{ job.services.mysql.ports['3306'] }}
 
