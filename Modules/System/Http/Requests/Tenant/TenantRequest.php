@@ -21,6 +21,7 @@ class TenantRequest extends FormRequest
             'cnpj' => 'required|int|unique:tenants,email',
             'password' => 'required|string|confirmed',
             'plan_id' => 'required|int',
+            'logo' => 'string',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
@@ -30,6 +31,7 @@ class TenantRequest extends FormRequest
                 'email' => 'string',
                 'cnpj' => 'int',
                 'plan_id' => 'int',
+                'logo' => 'string',
             ];
         }
 
