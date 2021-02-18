@@ -9,10 +9,10 @@ jobs:
   continuous-integration:
     name: Laravel (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
-    env:
-      DB_DATABASE: test
-      DB_USERNAME: root
-      DB_PASSWORD: secret
+
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:7.3
+
     # services:
     # mysql:
     #   image: mysql:8.0
