@@ -174,7 +174,9 @@ class OrderService extends Controller
         $rooms_ids = [];
 
         foreach ($rooms as $room) {
-            $rooms_ids[$room['room_id']] = ['obs' => $room['obs'] ?? null];
+            // $rooms_ids[$room['room_id']] = ['obs' => $room['obs'] ?? null];
+            // push array to make possible room of the same id on order
+            array_push($rooms_ids, ['room_id' => $room['room_id'],'obs' => $room['obs'] ?? null]);
         }
 
         return $rooms_ids;
