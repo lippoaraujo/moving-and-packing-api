@@ -30,6 +30,7 @@ class TenantFactory extends Factory
             'name'          => $name,
             'trading_name'  => $name,
             'email'         => $this->faker->email,
+            'logo'          => base64_encode($this->faker->text())
             // 'active'        => $this->faker->randomElement([1]),
         ];
     }

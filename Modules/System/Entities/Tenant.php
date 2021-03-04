@@ -21,6 +21,7 @@ class Tenant extends Model
         'name',
         'trading_name',
         'email',
+        'logo',
         'plan_id',
     ];
 
