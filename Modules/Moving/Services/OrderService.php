@@ -130,6 +130,7 @@ class OrderService extends Controller
                 $roomsData = collect($data['rooms']);
                 $rooms_ids = $this->getRoomsIds($roomsData);
 
+                $order->rooms()->detach();
                 $order->rooms()->sync($rooms_ids);
 
                 foreach ($order->rooms as $index => $room) {
