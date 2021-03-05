@@ -21,8 +21,8 @@ class UserRequest extends FormRequest
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|confirmed',
-            // 'user_group_id' => 'required|int',
-            // 'active' => 'required|string|max:1',
+            'roles'     => 'array',
+            'roles.*'   => 'int',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
@@ -30,6 +30,8 @@ class UserRequest extends FormRequest
                 'name' => 'string',
                 'email' => 'email',
                 'password' => 'string',
+                'roles'     => 'array',
+                'roles.*'   => 'int',
             ];
         }
 

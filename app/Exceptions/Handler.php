@@ -41,31 +41,31 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-    /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     *
-     * @throws \Exception
-     */
-    public function report(Throwable $exception)
-    {
-        // foreach ($this->dontReport as $type)
-        // {
-        //     if ($exception instanceof $type)
-        //         parent::report($exception);
-        // }
+    // /**
+    //  * Report or log an exception.
+    //  *
+    //  * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+    //  *
+    //  * @param  \Throwable  $exception
+    //  * @return void
+    //  *
+    //  * @throws \Exception
+    //  */
+    // public function report(Throwable $exception)
+    // {
+    //      foreach ($this->dontReport as $type)
+    //      {
+    //          if ($exception instanceof $type)
+    //              parent::report($exception);
+    //      }
 
-        // $bugsnag = app('bugsnag');
+    //      $bugsnag = app('bugsnag');
 
-        // if ($bugsnag) {
-        //     $bugsnag->notifyException($exception, null, "error");
-        // }
-        // parent::report($exception);
-    }
+    //      if ($bugsnag) {
+    //          $bugsnag->notifyException($exception, null, "error");
+    //      }
+    //      parent::report($exception);
+    // }
 
     /**
      * Register the exception handling callbacks for the application.
