@@ -11,6 +11,7 @@ use Modules\Moving\Entities\Address;
 use Modules\Moving\Entities\OrderRoom;
 use Modules\Moving\Entities\Room;
 use Modules\Moving\Repositories\Contracts\OrderRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 use Throwable;
 
 class OrderService extends Controller
@@ -71,9 +72,8 @@ class OrderService extends Controller
                 $rooms_ids = $this->getRoomsIds($roomsData);
 
                 $order->rooms()->sync($rooms_ids);
-
-                foreach ($order->rooms as $room) {
-                    $this->syncOrderItems($room, $roomsData);
+                foreach ($order->rooms as $index => $room) {
+                    $this->syncOrderItems($room, $roomsData[$index]);
                 }
             }
 
@@ -132,8 +132,8 @@ class OrderService extends Controller
 
                 $order->rooms()->sync($rooms_ids);
 
-                foreach ($order->rooms as $room) {
-                    $this->syncOrderItems($room, $roomsData, true);
+                foreach ($order->rooms as $index => $room) {
+                    $this->syncOrderItems($room, $roomsData[$index], true);
                 }
             }
 
@@ -194,8 +194,7 @@ class OrderService extends Controller
         $items_ids = [];
 
         foreach ($items as $item) {
-            //item ID and pivot datas... [1 => ['obs' => 'test', 'quantity' => 1]]
-            $items_ids[$item['item_id']] = ['obs' => $item['obs'] ?? null, 'quantity' => $item['quantity']];
+            array_push($items_ids, ['item_id' => $item['item_id'],'obs' => $item['obs'] ?? null, 'quantity' => $item['quantity']]);
         }
 
         return $items_ids;
@@ -228,27 +227,26 @@ class OrderService extends Controller
      *
      * @return void
      */
-    public function syncOrderItems(Room $room, Collection $rooms, bool $deleteImages = false)
+    public function syncOrderItems(Room $room, array $roomData, bool $deleteImages = false)
     {
-        foreach ($rooms as $roomData) {
-            if ($room->id === $roomData['room_id'] && !empty($roomData['items'])) {
-                $items = collect($roomData['items']);
+        if (!empty($roomData['items'])) {
+            $items = collect($roomData['items']);
 
-                $items_ids = $this->getItemsIds($items);
+            $items_ids = $this->getItemsIds($items);
 
-                $order_room = OrderRoom::find($room->pivot->id);
-                $order_room->items()->sync($items_ids);
+            $order_room = OrderRoom::find($room->pivot->id);
+
+            $order_room->items()->sync($items_ids);
+        }
+
+        if (!empty($roomData['images'])) {
+            if ($deleteImages) {
+                $room->images()->delete();
             }
 
-            if ($room->id === $roomData['room_id'] && !empty($roomData['images'])) {
-                if ($deleteImages) {
-                    $room->images()->delete();
-                }
+            $images = collect($roomData['images']);
 
-                $images = collect($roomData['images']);
-
-                $this->storeImages($room, $images);
-            }
+            $this->storeImages($room, $images);
         }
     }
 }
