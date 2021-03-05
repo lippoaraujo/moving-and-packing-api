@@ -194,7 +194,9 @@ class OrderService extends Controller
         $items_ids = [];
 
         foreach ($items as $item) {
-            array_push($items_ids, ['item_id' => $item['item_id'],'obs' => $item['obs'] ?? null, 'quantity' => $item['quantity']]);
+            array_push($items_ids, [
+                'item_id' => $item['item_id'],'obs' => $item['obs'] ?? null, 'quantity' => $item['quantity']
+            ]);
         }
 
         return $items_ids;
