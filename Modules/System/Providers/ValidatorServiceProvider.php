@@ -20,7 +20,7 @@ class ValidatorServiceProvider extends ServiceProvider
                     $column = $attribute;
                 }
 
-                $result = DB::table($table)->where($column, $value)->where('deleted_at', 'IS NOT', 'NULL')->get();
+                $result = DB::table($table)->where($column, $value)->whereNotNull('deleted_at')->get();
 
                 if(!$result->isEmpty()) {
                     return false;
