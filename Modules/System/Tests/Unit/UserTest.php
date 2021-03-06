@@ -28,7 +28,7 @@ class UserTest extends TestCase
 
         $response = $this->withHeaders($headers)
         ->json('POST', self::ROUTE_URL, $userData);
-
+        dd($response->getConent());
         $response->assertCreated();
         $response->assertJsonStructure($this->getJsonStructure());
     }
