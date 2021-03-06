@@ -43,6 +43,7 @@ class SystemServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(ValidatorServiceProvider::class);
     }
 
     /**

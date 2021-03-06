@@ -36,6 +36,46 @@ class UserTest extends TestCase
     /**
      * @test
      */
+    public function given_a_email_existing_on_database_when_posting_returns_validation_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $userData = User::factory()->passConfirmed()->make();
+        $userData = $userData->toArray();
+
+        $userData['email']    = $this->getUserAdmin()->email;
+        $userData['password'] = $userData['password_confirmation'];
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $userData);
+
+        $response->assertStatus(422);
+        $this->assertStringContainsString('The email has already been taken.', $response->getContent());
+    }
+
+    /**
+     * @test
+     */
+    public function given_a_email_user_disabled_when_posting_returns_validation_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $userData = User::factory()->passConfirmed()->make();
+        $userData = $userData->toArray();
+
+        $userData['email']    = $this->getUserAdmin()->email;
+        $userData['password'] = $userData['password_confirmation'];
+
+        $this->given_valid_user_id_when_deleting_returns_true();
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $userData);
+
+        $response->assertStatus(422);
+        $this->assertStringContainsString('Disabled entity found with this email.', $response->getContent());
+    }
+
+    /**
+     * @test
+     */
     public function given_incomplete_userdata_when_posting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
@@ -130,6 +170,25 @@ class UserTest extends TestCase
         ->json('PUT', $this->getRouteId(self::ROUTE_URL), $user->toArray());
 
         $response->assertNotFound();
+        $response->assertJsonStructure(['message']);
+    }
+
+    /**
+     * @test
+     */
+    public function given_a_email_existing_on_database_when_putting_returns_validation_error()
+    {
+        $user = $this->getUserAdmin();
+
+        $headers = $this->headers($this->getUserAdmin());
+        $userFakeData = User::factory()->passConfirmed()->make();
+        $userFakeData = $userFakeData->toArray();
+        $user->name = $userFakeData['name'];
+
+        $response = $this->withHeaders($headers)
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL), $user->toArray());
+
+        $response->assertStatus(422);
         $response->assertJsonStructure(['message']);
     }
 
