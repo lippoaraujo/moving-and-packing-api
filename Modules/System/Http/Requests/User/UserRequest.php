@@ -4,6 +4,7 @@ namespace Modules\System\Http\Requests\User;
 
 use App\Traits\ApiResponser;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Modules\System\Entities\User;
 
 class UserRequest extends FormRequest
@@ -19,16 +20,23 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users',
+            'email' => 'string|email|nullable|entity_disabled:users,email|unique:users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|string|confirmed',
             'roles'     => 'array',
             'roles.*'   => 'int',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
+            $id = $this->route('user');
+
             $rules = [
                 'name' => 'string',
-                'email' => 'email',
+                'email' => [
+                    'string',
+                    'email',
+                    'entity_disabled:users,email',
+                    Rule::unique('users', 'email')->ignore($id)->where('deleted_at', 'NULL')
+                ],
                 'password' => 'string',
                 'roles'     => 'array',
                 'roles.*'   => 'int',

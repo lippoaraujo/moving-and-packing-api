@@ -3,9 +3,11 @@
 namespace Modules\Moving\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CustomerRequest extends FormRequest
 {
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -15,8 +17,18 @@ class CustomerRequest extends FormRequest
     {
         $rules = [
             'name'      => 'required|string',
-            'email'     => 'string|email|unique:users|nullable',
-            'phone'     => 'required|string',
+            'email'     => [
+                'string',
+                'email',
+                'entity_disabled:customers,email',
+                'unique:customers,email,NULL,id,deleted_at,NULL'
+            ],
+            'phone'     => [
+                'string',
+                'nullable',
+                'entity_disabled:customers,phone',
+                'unique:customers,phone,NULL,id,deleted_at,NULL'
+            ],
             'address'   => 'string|nullable',
             'locality'  => 'string|nullable',
             'city'      => 'string|nullable',
@@ -25,10 +37,20 @@ class CustomerRequest extends FormRequest
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
+            $id = $this->route('customer');
             $rules = [
-                'name'      => 'string|nullable',
-                'email'     => 'string|email|unique:users|nullable',
-                'phone'     => 'string|nullable',
+                'id'        => "exists:customers,id",
+                'email'     => [
+                    'string',
+                    'email',
+                    'entity_disabled:customers,email',
+                    Rule::unique('customers', 'email')->ignore($id)->where('deleted_at', 'NULL')
+                ],
+                'phone'     => [
+                    'string',
+                    'entity_disabled:customers,phone',
+                    Rule::unique('customers', 'phone')->ignore($id)->where('deleted_at', 'NULL')
+                ],
                 'address'   => 'string|nullable',
                 'locality'  => 'string|nullable',
                 'city'      => 'string|nullable',

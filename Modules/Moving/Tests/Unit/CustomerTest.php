@@ -34,6 +34,47 @@ class CustomerTest extends TestCase
     /**
      * @test
      */
+    public function given_email_customer_disabled_when_posting_returns_validation_error()
+    {
+
+        $headers = $this->headers($this->getUserAdmin());
+
+        $data = $this->getData();
+
+        $data['email'] = $this->getValidcustomer()->email;
+
+        $this->given_valid_customer_id_when_deleting_returns_true();
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $data);
+
+        $response->assertStatus(422);
+        $this->assertStringContainsString('Disabled entity found with this email.', $response->getContent());
+    }
+
+    /**
+     * @test
+     */
+    public function given_phone_customer_disabled_when_posting_returns_validation_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+
+        $data = $this->getData();
+
+        $data['phone'] = $this->getValidcustomer()->phone;
+
+        $this->given_valid_customer_id_when_deleting_returns_true();
+
+        $response = $this->withHeaders($headers)
+        ->json('POST', self::ROUTE_URL, $data);
+
+        $response->assertStatus(422);
+        $this->assertStringContainsString('Disabled entity found with this phone.', $response->getContent());
+    }
+
+    /**
+     * @test
+     */
     public function given_customer_data_with_address_when_posting_returns_customer_stored_with_address()
     {
         $headers = $this->headers($this->getUserAdmin());
@@ -134,13 +175,34 @@ class CustomerTest extends TestCase
     {
         $headers = $this->headers($this->getUserAdmin());
         $customer = $this->getValidCustomer();
-        $customer->name = 'name updated';
+
+        $customer->name = $this->getData()['name'];
+        $customer->email = $this->getData()['email'];
+        $customer->phone = $this->getData()['phone'];
         $data = $customer->toArray();
 
         $response = $this->withHeaders($headers)
         ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
 
         $response->assertNotFound();
+        $response->assertJsonStructure(['message']);
+    }
+
+     /**
+     * @test
+     */
+    public function given_a_email_and_phone_existing_on_database_return_validation_error()
+    {
+        $headers = $this->headers($this->getUserAdmin());
+        $customer = $this->getValidCustomer();
+
+        $customer->name = $this->getData()['name'];
+        $data = $customer->toArray();
+
+        $response = $this->withHeaders($headers)
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
+
+        $response->assertStatus(422);
         $response->assertJsonStructure(['message']);
     }
 
