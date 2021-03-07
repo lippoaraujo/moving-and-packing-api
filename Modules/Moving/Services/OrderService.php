@@ -134,7 +134,7 @@ class OrderService extends Controller
                 $order->rooms()->sync($rooms_ids);
 
                 foreach ($order->rooms as $index => $room) {
-                    $this->syncOrderItems($room, $roomsData[$index], true);
+                    $this->syncOrderItems($room, $roomsData[$index]);
                 }
             }
 
@@ -230,7 +230,7 @@ class OrderService extends Controller
      *
      * @return void
      */
-    public function syncOrderItems(Room $room, array $roomData, bool $deleteImages = false)
+    public function syncOrderItems(Room $room, array $roomData)
     {
         if (!empty($roomData['items'])) {
             $items = collect($roomData['items']);
@@ -243,9 +243,10 @@ class OrderService extends Controller
         }
 
         if (!empty($roomData['images'])) {
-            if ($deleteImages) {
-                $room->images()->delete();
-            }
+            // already deletead on detach order_room because cascade database
+            // if ($deleteImages) {
+            //     $room->images()->delete();
+            // }
 
             $images = collect($roomData['images']);
 
