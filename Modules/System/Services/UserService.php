@@ -64,7 +64,7 @@ class UserService extends Controller
         $this->repo->update($data, $id);
 
         if (!empty($data['roles'])) {
-             $user->assignRole($data['roles']);
+            $user->syncRoles($data['roles']);
         }
 
         return true;
