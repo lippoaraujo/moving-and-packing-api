@@ -84,7 +84,6 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        $this->authorize('items', 'destroy');
         $data = $this->service->destroy($id);
         return $this->successResponse($data);
     }
