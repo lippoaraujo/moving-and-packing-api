@@ -39,11 +39,13 @@ class CustomerFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
+                'customer_address' => [
                 'address'   => $this->faker->address,
                 'locality'  => $this->faker->locale,
                 'city'      => $this->faker->city,
                 'country'   => $this->faker->country,
                 'postcode'  => $this->faker->postcode,
+                ]
             ];
         });
     }
