@@ -38,9 +38,9 @@ class CustomerService extends Controller
             DB::beginTransaction();
             $customer = $this->repo->create($data);
 
-            if (!empty($data['address'])) {
+            if (!empty($data['customer_address'])) {
                 // $address = $customer->adresses()->create($data);
-                $address = Address::create($data);
+                $address = Address::create($data['customer_address']);
                 $customer->setprimaryAddress($address);
                 $customer->primary_address_id = $address->id;
                 $customer->save();
@@ -73,13 +73,15 @@ class CustomerService extends Controller
      */
     public function update(array $data, $id)
     {
-        $this->show($id);
         try {
             DB::beginTransaction();
 
-            $this->repo->update($data, $id);
-            $customer = $this->show($id);
-            $customer->primaryAddress->update($data);
+            $d = $this->repo->update($data, $id);
+
+            if (!empty($data['customer_address'])) {
+                $customer = $this->show($id);
+                $customer->primaryAddress->update($data['customer_address']);
+            }
 
             DB::commit();
         } catch (Throwable $ex) {

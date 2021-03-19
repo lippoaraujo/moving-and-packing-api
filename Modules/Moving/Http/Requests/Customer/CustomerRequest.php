@@ -29,11 +29,12 @@ class CustomerRequest extends FormRequest
                 'entity_disabled:customers,phone',
                 'unique:customers,phone,NULL,id,deleted_at,NULL'
             ],
-            'address'   => 'string|nullable',
-            'locality'  => 'string|nullable',
-            'city'      => 'string|nullable',
-            'country'   => 'string|nullable',
-            'postcode'  => 'string|nullable',
+            'customer_address'      => 'array|required',
+            'customer_address.address'   => 'string|nullable',
+            'customer_address.locality'  => 'string|required',
+            'customer_address.city'   => 'string|required',
+            'customer_address.country'   => 'string|required',
+            'customer_address.postcode'   => 'string|nullable',
         ];
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
@@ -51,11 +52,12 @@ class CustomerRequest extends FormRequest
                     'entity_disabled:customers,phone',
                     Rule::unique('customers', 'phone')->ignore($id)->where('deleted_at', 'NULL')
                 ],
-                'address'   => 'string|nullable',
-                'locality'  => 'string|nullable',
-                'city'      => 'string|nullable',
-                'country'   => 'string|nullable',
-                'postcode'  => 'string|nullable',
+                'customer_address'      => 'array|required',
+                'customer_address.address'   => 'string|nullable',
+                'customer_address.locality'  => 'string|required',
+                'customer_address.city'   => 'string|required',
+                'customer_address.country'   => 'string|required',
+                'customer_address.postcode'   => 'string|nullable',
             ];
         }
 
