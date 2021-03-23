@@ -101,9 +101,11 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', 2),
+    // 'ttl' => env('JWT_TTL', 2),
     //24 hrs
     // 'ttl' => env('JWT_TTL', 60 * 24),
+    //1 hr
+    'ttl' => env('JWT_TTL', 60),
 
     /*
     |--------------------------------------------------------------------------
@@ -122,8 +124,8 @@ return [
     |
     */
 
-    'refresh_ttl' => env('JWT_REFRESH_TTL', 5),
-    // 'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
+    // 'refresh_ttl' => env('JWT_REFRESH_TTL', 5),
+    'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
 
     /*
     |--------------------------------------------------------------------------
