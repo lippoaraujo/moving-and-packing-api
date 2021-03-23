@@ -22,7 +22,7 @@ class CustomerTest extends TestCase
 
         $headers = $this->headers($this->getUserAdmin());
 
-        $data = $this->getData();
+        $data = $this->getData(true);
 
         $response = $this->withHeaders($headers)
         ->json('POST', self::ROUTE_URL, $data);
@@ -158,11 +158,14 @@ class CustomerTest extends TestCase
     {
         $headers = $this->headers($this->getUserAdmin());
         $customer = $this->getValidCustomer();
+
         $customer->name = 'name updated';
-        $data = $customer->toArray();
+        $customerData = $customer->toArray(true);
+        $customerData['customer_address'] = $customerData['primary_address'];
+        unset($customerData['primary_address']);
 
         $response = $this->withHeaders($headers)
-        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $customer->id), $data);
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $customer->id), $customerData);
 
         $response->assertOk();
         $response->assertExactJson(['data' => true]);
@@ -179,10 +182,12 @@ class CustomerTest extends TestCase
         $customer->name = $this->getData()['name'];
         $customer->email = $this->getData()['email'];
         $customer->phone = $this->getData()['phone'];
-        $data = $customer->toArray();
+        $customerData = $customer->toArray();
+        $customerData['customer_address'] = $customerData['primary_address'];
+        unset($customerData['primary_address']);
 
         $response = $this->withHeaders($headers)
-        ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL), $customerData);
 
         $response->assertNotFound();
         $response->assertJsonStructure(['message']);
@@ -248,7 +253,7 @@ class CustomerTest extends TestCase
 
     private function getValidcustomer(bool $toArray = false)
     {
-        $customer =  Customer::all()->first();
+        $customer =  Customer::all()->first()->load('primaryAddress');
 
         if($toArray) {
             $customer = $customer->toArray();
