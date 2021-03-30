@@ -36,7 +36,7 @@ class AuthTest extends TestCase
 
         $response = $this->postJson(self::ROUTE_URL.'/login', $data, []);
 
-        $response->assertUnauthorized();
+        $response->assertStatus(403);
     }
 
     /**
