@@ -46,7 +46,7 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return $this->errorResponse('Unauthorized', Response::HTTP_UNAUTHORIZED);
+            return $this->errorResponse('Unauthorized', Response::HTTP_FORBIDDEN);
         }
 
         $allPermissions = $this->userService->permission();
