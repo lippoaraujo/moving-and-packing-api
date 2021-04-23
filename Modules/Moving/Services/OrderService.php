@@ -139,6 +139,7 @@ class OrderService extends Controller
             }
 
             $update = $this->repo->update($data, $id);
+            $order->touch();
 
             DB::commit();
         } catch (Throwable $ex) {
