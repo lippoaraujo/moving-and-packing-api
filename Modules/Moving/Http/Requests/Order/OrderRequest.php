@@ -57,13 +57,13 @@ class OrderRequest extends FormRequest
                 'address_data.country'      => 'string',
                 'address_data.postcode'     => 'string',
 
-                'rooms'                     => 'array',
-                'rooms.*.room_id'           => 'int',
+                'rooms'                     => 'required|array',
+                'rooms.*.room_id'           => 'required|int',
                 'rooms.*.obs'               => 'string|nullable',
 
-                'rooms.*.items'             => 'array',
-                'rooms.*.items.*.item_id'   => 'int',
-                'rooms.*.items.*.quantity'  => 'int',
+                'rooms.*.items'             => 'required|array',
+                'rooms.*.items.*.item_id'   => 'required|int',
+                'rooms.*.items.*.quantity'  => 'required|int',
                 'rooms.*.items.*.obs'       => 'string|nullable',
 
                 'rooms.*.images'            => 'array|nullable',
