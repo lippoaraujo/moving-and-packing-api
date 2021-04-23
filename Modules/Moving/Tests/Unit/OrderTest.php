@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Modules\Moving\Entities\Customer;
 use Modules\Moving\Entities\Order;
+use Modules\Moving\Services\OrderService;
 
 class OrderTest extends TestCase
 {
@@ -102,12 +103,12 @@ class OrderTest extends TestCase
     public function given_order_data_withvalid_id_when_putting_returns_true()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $order = $this->getValidOrder();
-        $order->customer_signature = 'updated';
-        $data = $order->toArray();
+        $order = $this->getValidOrder(true);
+        $order['customer_signature'] = 'updated';
+        $data = $order;
 
         $response = $this->withHeaders($headers)
-        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $order->getKey()), $data);
+        ->json('PUT', $this->getRouteId(self::ROUTE_URL, $order['id']), $data);
 
         $response->assertOk();
         $response->assertExactJson(['data' => true]);
@@ -119,9 +120,9 @@ class OrderTest extends TestCase
     public function given_order_data_with_notvalid_id_when_putting_returns_error()
     {
         $headers = $this->headers($this->getUserAdmin());
-        $order = $this->getValidOrder();
-        $order->customer_signature = 'updated';
-        $data = $order->toArray();
+        $order = $this->getValidOrder(true);
+        $order['customer_signature'] = 'updated';
+        $data = $order;
 
         $response = $this->withHeaders($headers)
         ->json('PUT', $this->getRouteId(self::ROUTE_URL), $data);
@@ -182,8 +183,33 @@ class OrderTest extends TestCase
     {
         $order =  Order::all()->first();
 
+        $order = $order::with(
+                'address',
+                'customer',
+                'user',
+                'orderRooms.room',
+                'orderRooms.items.packing',
+                'orderRooms.images'
+            )->findOrFail($order->id);
+
         if($toArray) {
             $order = $order->toArray();
+
+            $room_id = $order['order_rooms'][0]['room_id'];
+            $item_id = $order['order_rooms'][0]['items'][0]['id'];
+            $qty    = $order['order_rooms'][0]['items'][0]['pivot']['quantity'];
+            $order['rooms'] = [
+                0 => [
+                    'room_id' => $room_id,
+                    'items' => [
+                        0   => [
+                            'item_id' => $item_id,
+                            'quantity'  => $qty
+                        ]
+                    ]
+                ]
+            ];
+            unset($order['order_rooms']);
         }
 
         return $order;
