@@ -16,8 +16,10 @@ class ItemRequest extends FormRequest
         $rules = [
             'name'              => 'required|string',
             'description'       => 'required|string',
+            'description_pt'    => 'nullable|string',
+            'description_es'    => 'nullable|string',
             'cubic_feet'        => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'packing_qty'          => 'required|int',
+            'packing_qty'       => 'required|int',
             'packing_id'        => 'required|int',
             'tag'               => 'required|string',
             'active'            => 'int',
@@ -27,6 +29,8 @@ class ItemRequest extends FormRequest
             $rules = [
                 'name'          => 'string',
                 'description'   => 'string',
+                'description_pt' => 'nullable|string',
+                'description_es' => 'nullable|string',
                 'cubic_feet'    => 'regex:/^\d+(\.\d{1,2})?$/',
                 'packing_qty'      => 'int',
                 'packing_id'    => 'int',
