@@ -187,6 +187,8 @@ class ItemTest extends TestCase
                 '*' => [
                     'id',
                     'name',
+                    'name_pt',
+                    'name_es',
                     'description',
                     'cubic_feet',
                     'tag',
@@ -203,6 +205,8 @@ class ItemTest extends TestCase
             $json = [
                 'id',
                 'name',
+                'name_pt',
+                'name_es',
                 'description',
                 'cubic_feet',
                 'tag',
@@ -214,6 +218,8 @@ class ItemTest extends TestCase
             $json = [
                 'id',
                 'name',
+                'name_pt',
+                'name_es',
                 'description',
                 'cubic_feet',
                 'tag',
