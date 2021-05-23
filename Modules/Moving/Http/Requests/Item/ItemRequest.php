@@ -15,9 +15,9 @@ class ItemRequest extends FormRequest
     {
         $rules = [
             'name'              => 'required|string',
+            'name_pt'           => 'nullable|string',
+            'name_es'           => 'nullable|string',
             'description'       => 'required|string',
-            'description_pt'    => 'nullable|string',
-            'description_es'    => 'nullable|string',
             'cubic_feet'        => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'packing_qty'       => 'required|int',
             'packing_id'        => 'required|int',
@@ -28,9 +28,9 @@ class ItemRequest extends FormRequest
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             $rules = [
                 'name'          => 'string',
+                'name_pt'       => 'nullable|string',
+                'name_es'       => 'nullable|string',
                 'description'   => 'string',
-                'description_pt' => 'nullable|string',
-                'description_es' => 'nullable|string',
                 'cubic_feet'    => 'regex:/^\d+(\.\d{1,2})?$/',
                 'packing_qty'      => 'int',
                 'packing_id'    => 'int',
