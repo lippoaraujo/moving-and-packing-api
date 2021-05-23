@@ -14,8 +14,8 @@ class AddNewLanguagesDescItemsTable extends Migration
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->text('description_pt')->after('description')->nullable();
-            $table->text('description_es')->after('description')->nullable();
+            $table->text('name_pt')->after('name')->nullable();
+            $table->text('name_es')->after('name')->nullable();
         });
     }
 
@@ -27,8 +27,8 @@ class AddNewLanguagesDescItemsTable extends Migration
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            $table->dropColumn('description_pt');
-            $table->dropColumn('description_es');
+            $table->dropColumn('name_pt');
+            $table->dropColumn('name_es');
         });
     }
 }
