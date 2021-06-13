@@ -21,8 +21,9 @@ class RoleRequest extends FormRequest
 
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             $rules = [
-                'name'          => 'required',
+                'name'          => 'required|string',
                 'permission'    => 'array',
+                'permission.*'  => 'integer'
             ];
         }
 

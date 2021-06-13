@@ -58,12 +58,11 @@ class RoleService extends Controller
      */
     public function update(array $data, $id)
     {
-        $role       = $this->repo->findById($id);
-        $role->name = $data['name'];
-        $role->save();
+        $this->repo->update($data, $id);
 
         if (!empty($data['permission'])) {
-            $role->syncPermissions();
+            $role       = $this->repo->findById($id);
+            $role->syncPermissions($data['permission']);
         }
 
         return true;
